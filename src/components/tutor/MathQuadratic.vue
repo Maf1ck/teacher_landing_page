@@ -362,4 +362,17 @@ const quadResult = computed(() => {
     }
   }
 }
+@media (max-width: 768px) {
+  .coeff-inputs-row {
+    gap: 8px;
+  }
+
+  .input-group {
+    label {
+      font-size: 10px;
+      white-space: normal;
+      line-height: 1.3;
+    }
+  }
+}
 </style>
