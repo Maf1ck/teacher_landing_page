@@ -9,6 +9,12 @@ const iconPath = computed(() => {
   switch (props.name) {
     case 'arrow-up-right':
       return 'M7 17L17 7M17 7H7M17 7V17'
+    case 'calculator':
+      return 'M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z M8 6h8v4H8V6zm0 8h2v-2H8v2zm0 4h2v-2H8v2zm4-4h2v-2h-2v2zm0 4h2v-2h-2v2zm4-4h2v-2h-2v2zm0 4h2v-2h-2v2z'
+    case 'percent':
+      return 'M19 5L5 19 M9 6.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zm11 11a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z'
+    case 'circle':
+      return 'M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z'
     case 'arrow-right':
       return 'M5 12h14M12 5l7 7-7 7'
     case 'chevron-left':

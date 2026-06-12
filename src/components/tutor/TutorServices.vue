@@ -24,7 +24,7 @@ section#services.services-section
         .service-card-header
           span.service-num 01
           h3.service-name ІСПИТИ
-        p.service-desc-text Підготовка до іспитів та міжнародних тестів (НМТ, egzamin ósmoklasisty, SAT тощо)
+        p.service-desc-text Підготовка до іспитів та міжнародних тестів (Abitur, Studienkolleg, SAT, egz.osm, НМТ)
 
       // Card 2
       .service-card

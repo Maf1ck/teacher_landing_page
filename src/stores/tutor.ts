@@ -3,6 +3,7 @@ import type { CaseStudy, Review, ContactForm, ContactFormErrors } from '../types
 
 export const useTutorStore = defineStore('tutor', {
   state: () => ({
+    currentPage: 'landing' as 'landing' | 'math-tools',
     isMobileMenuOpen: false,
     activeCase: 0,
     activeReview: 0,
@@ -149,6 +150,12 @@ export const useTutorStore = defineStore('tutor', {
 
     closeSuccessMessage() {
       this.isSubmitted = false
+    },
+
+    setCurrentPage(page: 'landing' | 'math-tools') {
+      this.currentPage = page
+      // Reset scroll on view change
+      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
     }
   }
 })

@@ -1,14 +1,27 @@
 <script setup lang="ts">
+import { nextTick } from 'vue'
 import { useTutorStore } from '../../stores/tutor'
 import TutorIcon from './TutorIcon.vue'
 
 const store = useTutorStore()
 
-const scrollToSection = (id: string) => {
+const navigateToSection = (id: string) => {
   store.closeMobileMenu()
-  const element = document.getElementById(id)
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' })
+  if (store.currentPage !== 'landing') {
+    store.setCurrentPage('landing')
+    nextTick(() => {
+      setTimeout(() => {
+        const element = document.getElementById(id)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 100)
+    })
+  } else {
+    const element = document.getElementById(id)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 }
 </script>
@@ -16,15 +29,16 @@ const scrollToSection = (id: string) => {
 <template lang="pug">
 header.header
   .nav-container
-    a.logo(href="#", @click.prevent="scrollToSection('hero')") MATH_SOFI
+    a.logo(href="#", @click.prevent="navigateToSection('hero')") MATH_SOFI
     
     nav.nav-links(:class="{ 'nav-active': store.isMobileMenuOpen }")
-      a(href="#about", @click.prevent="scrollToSection('about')") Про мене
-      a(href="#services", @click.prevent="scrollToSection('services')") З чим допомагаю
-      a(href="#cases", @click.prevent="scrollToSection('cases')") Кейси
-      a(href="#reviews", @click.prevent="scrollToSection('reviews')") Відгуки
-      a(href="#consultation", @click.prevent="scrollToSection('consultation')") Консультація
-      a.btn-nav(href="#signup", @click.prevent="scrollToSection('signup')") Записатись
+      a(href="#about", @click.prevent="navigateToSection('about')") Про мене
+      a(href="#services", @click.prevent="navigateToSection('services')") З чим допомагаю
+      a(href="#cases", @click.prevent="navigateToSection('cases')") Кейси
+      a(href="#reviews", @click.prevent="navigateToSection('reviews')") Відгуки
+      a.nav-highlight(href="#tools", :class="{ 'active': store.currentPage === 'math-tools' }", @click.prevent="store.setCurrentPage('math-tools')") Калькулятори
+      a(href="#consultation", @click.prevent="navigateToSection('consultation')") Консультація
+      a.btn-nav(href="#signup", @click.prevent="navigateToSection('signup')") Записатись
 
     button.burger-menu(@click="store.toggleMobileMenu", aria-label="Toggle menu")
       TutorIcon(:name="store.isMobileMenuOpen ? 'close' : 'menu'")
@@ -35,9 +49,7 @@ header.header
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: rgba(245, 247, 251, 0.85);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
   padding: 16px 0;
 }
 
@@ -72,6 +84,17 @@ header.header
     &:hover {
       color: var(--color-primary);
     }
+  }
+}
+
+.nav-highlight {
+  color: var(--color-primary) !important;
+  font-weight: 600 !important;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 2px;
+  
+  &:hover, &.active {
+    border-bottom-color: var(--color-primary) !important;
   }
 }
 

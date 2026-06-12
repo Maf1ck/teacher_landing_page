@@ -16,7 +16,7 @@ section#about.about-section
           .speech-bubble
             p Привіт! Мене звати #[span.highlight-inline Соня], і я #[span.highlight-inline допомагаю] дітям #[span.highlight-inline полюбити] математику та повірити в себе, навіть якщо зараз вони думають, що це «не їх предмет».
           .speech-bubble
-            p Зараз здобуваю ступінь магістра за спеціальністю #[span.highlight-inline «Середня освіта (математика)»].
+            p  Бакалавр за спеціальністю #[span.highlight-inline комп'ютерні науки] та магістр за спеціальністю #[span.highlight-inline «Середня освіта (математика)»].
           .speech-bubble
             p #[span.highlight-inline Моя мета] - допомогти дитині відчути, що математика може бути зрозумілою, цікавою і навіть улюбленою дисципліною.
 </template>

@@ -24,7 +24,6 @@ section#hero.hero-section
       .hero-image-circle
         img.tutor-hero-img(:src="heroImg", alt="Софія — Репетитор з математики")
       
-      // Floating Badges
       .badge.badge-1
         .badge-icon-box
           TutorIcon(name="graduation")
@@ -35,13 +34,13 @@ section#hero.hero-section
         .badge-icon-box
           TutorIcon(name="users")
         div
-          p.badge-title ПОНАД #[strong 100+] УЧНІВ
+          p.badge-title РОБОТА З УЧНЯМИ  ДО #[strong 7-11] КЛАСІВ
       
       .badge.badge-3
         .badge-icon-box
           TutorIcon(name="lightning")
         div
-          p.badge-title ДОСВІД РОБОТИ #[strong.color-blue 5 РОКІВ]
+          p.badge-title ДОСВІД РОБОТИ #[strong.color-blue 5+ РОКІВ]
 </template>
 
 <style scoped lang="scss">
@@ -52,7 +51,7 @@ section#hero.hero-section
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
+  grid-template-columns: 1fr 1fr;
   gap: 40px;
   align-items: center;
 }
@@ -81,26 +80,26 @@ section#hero.hero-section
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 480px;
+  height: 540px;
 }
 
 .hero-image-circle {
-  width: 380px;
-  height: 380px;
+  width: 440px;
+  height: 440px;
   border-radius: 50%;
   background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
   overflow: hidden;
   position: relative;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .tutor-hero-img {
-  width: 85%;
-  height: auto;
-  object-fit: cover;
-  transform: translateY(5px);
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+  object-position: top center;
 }
 
 /* Floating Badges */
@@ -201,12 +200,12 @@ section#hero.hero-section
   }
 
   .hero-image-circle {
-    width: 320px;
-    height: 320px;
+    width: 360px;
+    height: 360px;
   }
 
   .hero-image-wrapper {
-    height: 400px;
+    height: 460px;
   }
 
   .badge-1 {
@@ -272,13 +271,13 @@ section#hero.hero-section
   }
 
   .hero-image-circle {
-    width: 260px;
-    height: 260px;
+    width: 300px;
+    height: 300px;
   }
 
   .hero-image-wrapper {
-    height: 320px;
-    max-width: 340px;
+    height: 380px;
+    max-width: 380px;
   }
 
   .badge {
