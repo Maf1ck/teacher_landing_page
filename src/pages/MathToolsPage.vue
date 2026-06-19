@@ -190,18 +190,36 @@ const tabs = [
 .tools-content-area {
   padding: 40px;
   overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 0;
+  box-sizing: border-box;
+  width: 100%;
 }
 
-/* Responsive adjustment */
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .tools-container-card {
     grid-template-columns: 240px 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .tools-container-card {
+    grid-template-columns: 200px 1fr;
+  }
+
+  .sidebar-tab-btn {
+    font-size: 13px;
+    padding: 10px 12px;
   }
 }
 
 @media (max-width: 768px) {
   .tools-container-card {
     grid-template-columns: 1fr;
+  }
+
+  .tools-content-area {
+    padding: 20px 16px;
   }
 
   .tools-sidebar {

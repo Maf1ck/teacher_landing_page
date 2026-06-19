@@ -362,8 +362,20 @@ const quadResult = computed(() => {
     }
   }
 }
+@media (max-width: 1024px) {
+  .coeff-inputs-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  // Make the third input (c) span full width
+  .input-group:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
 @media (max-width: 768px) {
   .coeff-inputs-row {
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
 
@@ -373,6 +385,16 @@ const quadResult = computed(() => {
       white-space: normal;
       line-height: 1.3;
     }
+  }
+}
+
+@media (max-width: 480px) {
+  .coeff-inputs-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .input-group:last-child {
+    grid-column: auto;
   }
 }
 </style>

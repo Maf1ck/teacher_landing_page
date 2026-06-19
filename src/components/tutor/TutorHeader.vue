@@ -123,7 +123,7 @@ header.header
   font-size: 24px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .burger-menu {
     display: block;
     z-index: 101;
@@ -133,12 +133,12 @@ header.header
     position: fixed;
     top: 0;
     right: 0;
-    width: 280px;
+    width: 300px;
     height: 100vh;
-    background-color: var(--color-bg-card);
+    background-color: var(--color-bg-card);;
     flex-direction: column;
     padding: 100px 32px 32px;
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.08);
     z-index: 100;
     transform: translateX(100%);
     transition: transform var(--transition-normal);
@@ -150,7 +150,8 @@ header.header
 
     a {
       width: 100%;
-      padding: 8px 0;
+      padding: 10px 0;
+      font-size: 16px;
     }
   }
 
