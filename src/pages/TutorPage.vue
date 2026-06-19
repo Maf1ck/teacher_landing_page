@@ -8,6 +8,6 @@ const store = useTutorStore()
 
 <template lang="pug">
 MathTutorLanding(v-if="store.currentPage === 'landing'")
-MathToolsPage(v-else-if="store.currentPage === 'math-tools'")
+MathToolsPage(v-else)
 </template>
 

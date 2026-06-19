@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick } from 'vue'
+import { nextTick, computed } from 'vue'
 import { useTutorStore } from '../../stores/tutor'
 import TutorIcon from './TutorIcon.vue'
 
@@ -24,6 +24,9 @@ const navigateToSection = (id: string) => {
     }
   }
 }
+const isMathPage = computed(() => {
+  return ['math-quadratic', 'math-percentage', 'math-trig-circle', 'math-right-triangle', 'math-graph-plotter', 'math-formulas'].includes(store.currentPage)
+})
 </script>
 
 <template lang="pug">
@@ -36,7 +39,7 @@ header.header
       a(href="#services", @click.prevent="navigateToSection('services')") З чим допомагаю
       a(href="#cases", @click.prevent="navigateToSection('cases')") Кейси
       a(href="#reviews", @click.prevent="navigateToSection('reviews')") Відгуки
-      a.nav-highlight(href="#tools", :class="{ 'active': store.currentPage === 'math-tools' }", @click.prevent="store.setCurrentPage('math-tools')") Калькулятори
+      a.nav-highlight(href="#tools", :class="{ 'active': isMathPage }", @click.prevent="store.setCurrentPage('math-quadratic')") Калькулятори
       a(href="#consultation", @click.prevent="navigateToSection('consultation')") Консультація
       a.btn-nav(href="#signup", @click.prevent="navigateToSection('signup')") Записатись
 

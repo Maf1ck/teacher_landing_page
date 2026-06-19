@@ -3,7 +3,7 @@ import type { CaseStudy, Review, ContactForm, ContactFormErrors } from '../types
 
 export const useTutorStore = defineStore('tutor', {
   state: () => ({
-    currentPage: 'landing' as 'landing' | 'math-tools',
+    currentPage: 'landing' as 'landing' | 'math-quadratic' | 'math-percentage' | 'math-trig-circle' | 'math-right-triangle' | 'math-graph-plotter' | 'math-formulas',
     isMobileMenuOpen: false,
     activeCase: 0,
     activeReview: 0,
@@ -152,7 +152,7 @@ export const useTutorStore = defineStore('tutor', {
       this.isSubmitted = false
     },
 
-    setCurrentPage(page: 'landing' | 'math-tools') {
+    setCurrentPage(page: 'landing' | 'math-quadratic' | 'math-percentage' | 'math-trig-circle' | 'math-right-triangle' | 'math-graph-plotter' | 'math-formulas') {
       this.currentPage = page
       // Reset scroll on view change
       window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })

@@ -21,6 +21,10 @@ const iconPath = computed(() => {
       return 'M15 18l-6-6 6-6'
     case 'chevron-right':
       return 'M9 18l6-6-6-6'
+    case 'ruler':
+      return 'M2 8h20v8H2z M6 8v3 M10 8v5 M14 8v3 M18 8v3'
+    case 'chart':
+      return 'M3 3v18h18 M18 9l-5 5-4-4-5 5'
     case 'graduation':
       return 'M22 10v6M2 10l10-5 10 5-10 5z M6 12.5V16c0 1.5 2.5 3 6 3s6-1.5 6-3v-3.5'
     case 'users':

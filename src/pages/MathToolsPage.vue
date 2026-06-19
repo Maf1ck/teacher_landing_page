@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useTutorStore } from '../stores/tutor'
 import TutorHeader from '../components/tutor/TutorHeader.vue'
 import TutorFooter from '../components/tutor/TutorFooter.vue'
@@ -9,19 +8,20 @@ import TutorIcon from '../components/tutor/TutorIcon.vue'
 import MathQuadratic from '../components/tutor/MathQuadratic.vue'
 import MathPercentage from '../components/tutor/MathPercentage.vue'
 import MathTrigCircle from '../components/tutor/MathTrigCircle.vue'
+import MathRightTriangle from '../components/tutor/MathRightTriangle.vue'
+import MathGraphPlotter from '../components/tutor/MathGraphPlotter.vue'
 import MathFormulas from '../components/tutor/MathFormulas.vue'
 
 const store = useTutorStore()
 
-// Active tab selector
-const activeTab = ref<'quadratic' | 'percent' | 'trig' | 'quiz' | 'formulas'>('quadratic')
-
 // Tabs definition
 const tabs = [
-  { id: 'quadratic', label: 'Квадратні рівняння', icon: 'lightning' },
-  { id: 'percent', label: 'Калькулятор відсотків', icon: 'percent' },
-  { id: 'trig', label: 'Тригонометричне коло', icon: 'circle' },
-  { id: 'formulas', label: 'Довідник формул', icon: 'lightbulb' }
+  { id: 'math-quadratic', label: 'Квадратні рівняння', icon: 'lightning' },
+  { id: 'math-percentage', label: 'Калькулятор відсотків', icon: 'percent' },
+  { id: 'math-trig-circle', label: 'Тригонометричне коло', icon: 'circle' },
+  { id: 'math-right-triangle', label: 'Прямокутний трикутник', icon: 'ruler' },
+  { id: 'math-graph-plotter', label: 'Побудова графіків', icon: 'chart' },
+  { id: 'math-formulas', label: 'Довідник формул', icon: 'lightbulb' }
 ] as const
 </script>
 
@@ -48,18 +48,20 @@ const tabs = [
             button.sidebar-tab-btn(
               v-for="tab in tabs"
               :key="tab.id"
-              :class="{ active: activeTab === tab.id }"
-              @click="activeTab = tab.id"
+              :class="{ active: store.currentPage === tab.id }"
+              @click="store.setCurrentPage(tab.id)"
             )
               TutorIcon.tab-icon(:name="tab.icon")
               span.tab-label {{ tab.label }}
 
         //- Main Work Area
         section.tools-content-area
-          MathQuadratic(v-if="activeTab === 'quadratic'")
-          MathPercentage(v-else-if="activeTab === 'percent'")
-          MathTrigCircle(v-else-if="activeTab === 'trig'")
-          MathFormulas(v-else-if="activeTab === 'formulas'")
+          MathQuadratic(v-if="store.currentPage === 'math-quadratic'")
+          MathPercentage(v-else-if="store.currentPage === 'math-percentage'")
+          MathTrigCircle(v-else-if="store.currentPage === 'math-trig-circle'")
+          MathRightTriangle(v-else-if="store.currentPage === 'math-right-triangle'")
+          MathGraphPlotter(v-else-if="store.currentPage === 'math-graph-plotter'")
+          MathFormulas(v-else-if="store.currentPage === 'math-formulas'")
 
   TutorFooter
 </template>
@@ -241,10 +243,6 @@ const tabs = [
 
     .tab-label {
       display: inline;
-    }
-
-    &:last-child {
-      grid-column: span 2;
     }
 
     &:hover {
