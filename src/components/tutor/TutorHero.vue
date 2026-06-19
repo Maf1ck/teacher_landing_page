@@ -34,7 +34,7 @@ section#hero.hero-section
         .badge-icon-box
           TutorIcon(name="users")
         div
-          p.badge-title РОБОТА З УЧНЯМИ  ДО #[strong 7-11] КЛАСІВ
+          p.badge-title РОБОТА З УЧНЯМИ #[strong 7-11] КЛАСІВ
       
       .badge.badge-3
         .badge-icon-box
@@ -75,34 +75,44 @@ section#hero.hero-section
   gap: 16px;
 }
 
+/*
+  --cr = circle radius (половина ширини кола).
+  Бейджі позиціонуються через calc(50% ± --cr),
+  тому вони ЗАВЖДИ прив'язані до краю кола,
+  незалежно від розміру екрану.
+*/
 .hero-image-wrapper {
+  --cr: 220px; /* половина від 440px (desktop) */
+
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
   height: 540px;
 }
 
 .hero-image-circle {
-  width: 440px;
-  height: 440px;
+  width: calc(var(--cr) * 2);
+  height: calc(var(--cr) * 2);
   border-radius: 50%;
   background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
   overflow: hidden;
   position: relative;
+  flex-shrink: 0;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .tutor-hero-img {
-  width: auto;
+  width: 100%;
   height: 100%;
   object-fit: contain;
   object-position: top center;
 }
 
-/* Floating Badges */
+/* Floating Badges — позиціонуються відносно wrapper */
 .badge {
   position: absolute;
   background-color: var(--color-bg-card);
@@ -113,20 +123,26 @@ section#hero.hero-section
   align-items: center;
   gap: 12px;
   z-index: 10;
-  max-width: 250px;
+  max-width: 240px;
   border: 1px solid rgba(226, 232, 240, 0.8);
+  /* Щоб текст ніколи не переходив на картинку */
+  pointer-events: none;
 }
 
+/* Уніфікований розмір кола іконки — однаковий у всіх бейджів */
 .badge-icon-box {
   background-color: var(--color-primary-light);
   color: var(--color-primary);
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 18px;
+  flex-shrink: 0;
 }
 
 .badge-title {
@@ -141,20 +157,29 @@ section#hero.hero-section
   }
 }
 
+/*
+  Формула:
+  - Лівий бейдж: left: max(0px, calc(50% - var(--cr) - ширина_бейджа))
+    → починається лівіше кола, max(0px) не дає вийти за wrapper
+  - Правий бейдж: left: min(calc(100% - 200px), calc(50% + var(--cr) - 30px))
+    → починається правіше кола, min() не дає вийти за правий край wrapper
+*/
 .badge-1 {
-  top: 15%;
-  left: -10%;
-  max-width: 200px;
+  top: 10%;
+  left: max(0px, calc(50% - var(--cr) - 160px));
+  max-width: 210px;
 }
 
 .badge-2 {
-  right: -5%;
-  top: 40%;
+  top: 42%;
+  /* Прив'язаний до ПРАВОГО краю кола: 30px overlap на синьому фоні */
+  left: min(calc(100% - 200px), calc(50% + var(--cr) - 30px));
+  max-width: 220px;
 }
 
 .badge-3 {
-  bottom: 12%;
-  left: 2%;
+  bottom: 10%;
+  left: max(0px, calc(50% - var(--cr) - 120px));
 }
 
 .btn {
@@ -169,6 +194,7 @@ section#hero.hero-section
   cursor: pointer;
   transition: all var(--transition-fast);
   border: none;
+  pointer-events: auto;
 }
 
 .btn-primary {
@@ -199,21 +225,10 @@ section#hero.hero-section
     font-size: 40px;
   }
 
-  .hero-image-circle {
-    width: 360px;
-    height: 360px;
-  }
-
+  /* Оновлюємо лише --cr — бейджі автоматично перераховуються */
   .hero-image-wrapper {
+    --cr: 180px; /* 360px / 2 */
     height: 460px;
-  }
-
-  .badge-1 {
-    left: -2%;
-  }
-
-  .badge-2 {
-    right: -2%;
   }
 }
 
@@ -232,27 +247,14 @@ section#hero.hero-section
     justify-content: center;
   }
 
+  /* Оновлюємо лише --cr — бейджі автоматично перераховуються */
   .hero-image-wrapper {
+    --cr: 160px; /* 320px / 2 */
     order: -1;
-    height: 360px;
+    height: 400px;
     width: 100%;
-    max-width: 440px;
+    max-width: 500px;
     margin: 0 auto;
-  }
-
-  .badge-1 {
-    top: 10%;
-    left: 0;
-  }
-
-  .badge-2 {
-    right: 0;
-    top: 40%;
-  }
-
-  .badge-3 {
-    bottom: 5%;
-    left: 8px;
   }
 }
 
@@ -270,44 +272,28 @@ section#hero.hero-section
     }
   }
 
-  .hero-image-circle {
-    width: 300px;
-    height: 300px;
-  }
-
+  /* Оновлюємо лише --cr — бейджі автоматично перераховуються */
   .hero-image-wrapper {
-    height: 380px;
+    --cr: 130px; /* 260px / 2 */
+    height: 360px;
     max-width: 380px;
   }
 
   .badge {
     padding: 8px 12px;
-    max-width: 135px;
+    max-width: 160px;
   }
 
   .badge-icon-box {
-    width: 28px;
-    height: 28px;
-    font-size: 14px;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    font-size: 16px;
   }
 
   .badge-title {
     font-size: 10px;
-  }
-
-  .badge-1 {
-    top: 5%;
-    left: -8px;
-  }
-
-  .badge-2 {
-    right: -8px;
-    top: 40%;
-  }
-
-  .badge-3 {
-    bottom: 5%;
-    left: 0;
   }
 }
 </style>

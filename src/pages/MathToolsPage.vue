@@ -9,7 +9,6 @@ import TutorIcon from '../components/tutor/TutorIcon.vue'
 import MathQuadratic from '../components/tutor/MathQuadratic.vue'
 import MathPercentage from '../components/tutor/MathPercentage.vue'
 import MathTrigCircle from '../components/tutor/MathTrigCircle.vue'
-import MathNmtTrainer from '../components/tutor/MathNmtTrainer.vue'
 import MathFormulas from '../components/tutor/MathFormulas.vue'
 
 const store = useTutorStore()
@@ -22,7 +21,6 @@ const tabs = [
   { id: 'quadratic', label: 'Квадратні рівняння', icon: 'lightning' },
   { id: 'percent', label: 'Калькулятор відсотків', icon: 'percent' },
   { id: 'trig', label: 'Тригонометричне коло', icon: 'circle' },
-  { id: 'quiz', label: 'Тренажер НМТ', icon: 'graduation' },
   { id: 'formulas', label: 'Довідник формул', icon: 'lightbulb' }
 ] as const
 </script>
@@ -61,7 +59,6 @@ const tabs = [
           MathQuadratic(v-if="activeTab === 'quadratic'")
           MathPercentage(v-else-if="activeTab === 'percent'")
           MathTrigCircle(v-else-if="activeTab === 'trig'")
-          MathNmtTrainer(v-else-if="activeTab === 'quiz'")
           MathFormulas(v-else-if="activeTab === 'formulas'")
 
   TutorFooter
