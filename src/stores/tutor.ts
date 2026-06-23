@@ -81,7 +81,10 @@ export const useTutorStore = defineStore('tutor', {
     errors: {
       name: '',
       contact: ''
-    } as ContactFormErrors
+    } as ContactFormErrors,
+
+    // Form submission error
+    submitError: ''
   }),
 
   actions: {
@@ -113,6 +116,7 @@ export const useTutorStore = defineStore('tutor', {
       let isValid = true
       this.errors.name = ''
       this.errors.contact = ''
+      this.submitError = ''
 
       if (!this.form.name.trim()) {
         this.errors.name = 'Будь ласка, вкажіть ваше ім\'я'
@@ -127,14 +131,28 @@ export const useTutorStore = defineStore('tutor', {
       return isValid
     },
 
-    submitForm() {
+    async submitForm() {
       if (!this.validateForm()) return
 
       this.isSubmitting = true
+      this.submitError = ''
       
-      // Simulating API Call
-      setTimeout(() => {
-        this.isSubmitting = false
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+        const response = await fetch(`${apiUrl}/api/submit`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(this.form)
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Не вдалося надіслати заявку.')
+        }
+
         this.isSubmitted = true
         
         // Reset form inputs
@@ -145,7 +163,12 @@ export const useTutorStore = defineStore('tutor', {
           goal: '',
           comment: ''
         }
-      }, 1200)
+      } catch (error: any) {
+        console.error('Submission error:', error)
+        this.submitError = error.message || 'Не вдалося надіслати заявку. Перевірте з\'єднання або спробуйте пізніше.'
+      } finally {
+        this.isSubmitting = false
+      }
     },
 
     closeSuccessMessage() {

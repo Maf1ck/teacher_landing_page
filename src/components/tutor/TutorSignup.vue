@@ -72,6 +72,9 @@ section#signup.signup-section
           span.spinner(v-if="store.isSubmitting")
           span(v-else) Надіслати заявку #[TutorIcon(name="arrow-right")]
 
+        // Submit Error Message
+        span.error-msg.text-center(v-if="store.submitError") {{ store.submitError }}
+
       // Success Modal Overlay
       .success-overlay(v-if="store.isSubmitted")
         .success-card
@@ -170,6 +173,13 @@ section#signup.signup-section
 .error-msg {
   font-size: 12px;
   color: #fca5a5;
+
+  &.text-center {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 4px;
+    font-weight: 500;
+  }
 }
 
 .btn {
