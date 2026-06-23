@@ -161,6 +161,7 @@ export const useTutorStore = defineStore('tutor', {
           name: '',
           contact: '',
           grade: '',
+          country: '',
           goal: '',
           comment: ''
         }

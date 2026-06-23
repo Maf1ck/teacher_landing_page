@@ -19,6 +19,7 @@ export interface ContactForm {
   name: string
   contact: string
   grade: string
+  country: string
   goal: string
   comment: string
 }
