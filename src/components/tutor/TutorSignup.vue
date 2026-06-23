@@ -56,6 +56,16 @@ section#signup.signup-section
             option(value="school") Підтягнути шкільну програму
             option(value="adaptation") Адаптація за кордоном
             option(value="olympiad") Олімпіадна математика / Логіка
+        
+        .form-group
+          label(for="country") Програма навчання якої країни
+          select(id="country" v-model="store.form.country")
+            option(value="" disabled selected) Оберіть країну
+            option(value="ukraine") Україна
+            option(value="poland") Польща
+            option(value="germany") Німеччина
+            option(value="austria") Австрія
+            option(value="czech-republic") США
 
         // Comment Input
         .form-group
