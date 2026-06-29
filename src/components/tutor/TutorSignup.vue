@@ -3,6 +3,7 @@ import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import { useTutorStore } from '../../stores/tutor'
 import TutorIcon from './TutorIcon.vue'
+import FormSelect from './FormSelect.vue'
 
 const store = useTutorStore()
 
@@ -25,7 +26,7 @@ const schema = yup.object({
   comment: yup.string().optional(),
 })
 
-const { handleSubmit, isSubmitting: formSubmitting, meta } = useForm({ validationSchema: schema })
+const { handleSubmit, isSubmitting: formSubmitting } = useForm({ validationSchema: schema })
 
 const { value: name, errorMessage: nameError } = useField<string>('name')
 const { value: contact, errorMessage: contactError } = useField<string>('contact')
@@ -33,6 +34,28 @@ const { value: grade } = useField<string>('grade')
 const { value: goal } = useField<string>('goal')
 const { value: country } = useField<string>('country')
 const { value: comment } = useField<string>('comment')
+
+const gradeOptions = [
+  { value: '1-4', label: 'Молодша школа (1-4 класи)' },
+  { value: '5-9', label: 'Середня школа (5-9 класи)' },
+  { value: '10-11', label: 'Старша школа (10-11 класи)' },
+  { value: 'student', label: 'Студент / Дорослий' },
+]
+
+const goalOptions = [
+  { value: 'exams', label: 'Підготовка до іспитів (НМТ, ЗНО, SAT)' },
+  { value: 'school', label: 'Підтягнути шкільну програму' },
+  { value: 'adaptation', label: 'Адаптація за кордоном' },
+  { value: 'olympiad', label: 'Олімпіадна математика / Логіка' },
+]
+
+const countryOptions = [
+  { value: 'ukraine', label: 'Україна' },
+  { value: 'poland', label: 'Польща' },
+  { value: 'germany', label: 'Німеччина' },
+  { value: 'austria', label: 'Австрія' },
+  { value: 'usa', label: 'США' },
+]
 
 const onSubmit = handleSubmit(async (values) => {
   store.form.name = values.name
@@ -81,33 +104,33 @@ section#signup.signup-section
 
         // Grade Select
         .form-group
-          label(for="grade") Клас / Вік дитини
-          select(id="grade" v-model="grade")
-            option(value="" disabled selected) Оберіть варіант
-            option(value="1-4") Молодша школа (1-4 класи)
-            option(value="5-9") Середня школа (5-9 класи)
-            option(value="10-11") Старша школа (10-11 класи)
-            option(value="student") Студент / Дорослий
+          label Клас / Вік дитини
+          FormSelect(
+            v-model="grade"
+            :options="gradeOptions"
+            placeholder="Оберіть варіант"
+            id="grade"
+          )
 
         // Goal Select
         .form-group
-          label(for="goal") Мета навчання
-          select(id="goal" v-model="goal")
-            option(value="" disabled selected) Оберіть мету занять
-            option(value="exams") Підготовка до іспитів (НМТ, ЗНО, SAT)
-            option(value="school") Підтягнути шкільну програму
-            option(value="adaptation") Адаптація за кордоном
-            option(value="olympiad") Олімпіадна математика / Логіка
+          label Мета навчання
+          FormSelect(
+            v-model="goal"
+            :options="goalOptions"
+            placeholder="Оберіть мету занять"
+            id="goal"
+          )
 
+        // Country Select
         .form-group
-          label(for="country") Програма навчання якої країни
-          select(id="country" v-model="country")
-            option(value="" disabled selected) Оберіть країну
-            option(value="ukraine") Україна
-            option(value="poland") Польща
-            option(value="germany") Німеччина
-            option(value="austria") Австрія
-            option(value="usa") США
+          label Програма навчання якої країни
+          FormSelect(
+            v-model="country"
+            :options="countryOptions"
+            placeholder="Оберіть країну"
+            id="country"
+          )
 
         // Comment Input
         .form-group
@@ -120,7 +143,7 @@ section#signup.signup-section
           )
 
         // Submit Button
-        button.btn.btn-primary.btn-submit(
+        button.btn.btn-submit(
           type="submit"
           :disabled="store.isSubmitting || formSubmitting"
         )
@@ -138,7 +161,7 @@ section#signup.signup-section
             TutorIcon(name="check")
           h3 Заявку надіслано!
           p Дякую за звернення! Я зв'яжуся з вами у найближчий час через вказані контакти для узгодження часу консультації.
-          button.btn.btn-primary(@click="store.closeSuccessMessage") Зрозуміло
+          button.btn.btn-success-close(@click="store.closeSuccessMessage") Зрозуміло
 </template>
 
 <style scoped lang="scss">
@@ -186,6 +209,7 @@ section#signup.signup-section
   label {
     font-size: 14px;
     font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
   }
 }
 
@@ -194,36 +218,31 @@ section#signup.signup-section
 }
 
 .form-group input,
-.form-group select,
 .form-group textarea {
   padding: 12px 16px;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.12);
   color: white;
   font-size: 15px;
-  transition: all var(--transition-fast);
+  transition: all 0.2s ease;
+  font-family: inherit;
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.55);
   }
 
   &:focus {
     outline: none;
     border-color: white;
-    background-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
   }
-}
-
-.form-group select option {
-  background-color: var(--color-primary);
-  color: white;
 }
 
 .input-error {
   border-color: #f87171 !important;
-  background-color: rgba(239, 68, 68, 0.1) !important;
+  background-color: rgba(239, 68, 68, 0.12) !important;
 }
 
 .error-msg {
@@ -250,32 +269,33 @@ section#signup.signup-section
   transform: translateY(-4px);
 }
 
+/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
+  padding: 14px 24px;
   border-radius: var(--radius-md);
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 17px;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all 0.2s ease;
   border: none;
+  font-family: inherit;
+  width: 100%;
+  margin-top: 12px;
 }
 
 .btn-submit {
   background-color: white;
   color: var(--color-primary);
-  margin-top: 12px;
-  padding: 14px;
-  font-size: 17px;
-  font-weight: 700;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 
   &:hover:not(:disabled) {
     background-color: #f1f5f9;
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   }
 
   &:disabled {
@@ -319,16 +339,28 @@ section#signup.signup-section
     color: rgba(255, 255, 255, 0.9);
     margin: 0;
   }
+}
 
-  .btn {
-    background-color: white;
-    color: var(--color-primary);
-    margin-top: 8px;
-    width: 100%;
+.btn-success-close {
+  background-color: white;
+  color: var(--color-primary);
+  padding: 12px 32px;
+  margin-top: 8px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all 0.2s ease;
 
-    &:hover {
-      background-color: #f1f5f9;
-    }
+  &:hover {
+    background-color: #f1f5f9;
+    transform: translateY(-1px);
   }
 }
 
@@ -349,7 +381,7 @@ section#signup.signup-section
 .spinner {
   width: 20px;
   height: 20px;
-  border: 3px solid rgba(37, 99, 235, 0.2);
+  border: 3px solid rgba(37, 99, 235, 0.25);
   border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
