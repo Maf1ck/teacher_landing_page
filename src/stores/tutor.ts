@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { CaseStudy, Review, ContactForm, ContactFormErrors } from '../types/tutor'
+import type { CaseStudy, Review, ContactForm } from '../types/tutor'
 
 export const useTutorStore = defineStore('tutor', {
   state: () => ({
@@ -160,12 +160,6 @@ export const useTutorStore = defineStore('tutor', {
       comment: ''
     } as ContactForm,
 
-    // Form validation errors
-    errors: {
-      name: '',
-      contact: ''
-    } as ContactFormErrors,
-
     // Form submission error
     submitError: ''
   }),
@@ -195,27 +189,7 @@ export const useTutorStore = defineStore('tutor', {
       this.activeReview = (this.activeReview - 1 + this.reviews.length) % this.reviews.length
     },
 
-    validateForm(): boolean {
-      let isValid = true
-      this.errors.name = ''
-      this.errors.contact = ''
-      this.submitError = ''
-
-      if (!this.form.name.trim()) {
-        this.errors.name = 'Будь ласка, вкажіть ваше ім\'я'
-        isValid = false
-      }
-
-      if (!this.form.contact.trim()) {
-        this.errors.contact = 'Вкажіть номер телефону або Telegram нік'
-        isValid = false
-      }
-
-      return isValid
-    },
-
     async submitForm() {
-      if (!this.validateForm()) return
 
       this.isSubmitting = true
       this.submitError = ''

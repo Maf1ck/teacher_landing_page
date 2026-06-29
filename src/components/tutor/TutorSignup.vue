@@ -1,8 +1,48 @@
 <script setup lang="ts">
+import { useForm, useField } from 'vee-validate'
+import * as yup from 'yup'
 import { useTutorStore } from '../../stores/tutor'
 import TutorIcon from './TutorIcon.vue'
 
 const store = useTutorStore()
+
+// Validation schema
+const schema = yup.object({
+  name: yup
+    .string()
+    .required("Будь ласка, вкажіть ваше ім'я")
+    .min(2, "Ім'я має містити щонайменше 2 символи"),
+  contact: yup
+    .string()
+    .required('Вкажіть номер телефону або Telegram нік')
+    .test('phone-or-telegram', 'Вкажіть телефон (+380...) або Telegram (@нік)', (val) => {
+      if (!val) return false
+      return val.startsWith('@') || /^\+?\d[\d\s\-()]{6,}$/.test(val)
+    }),
+  grade: yup.string().optional(),
+  goal: yup.string().optional(),
+  country: yup.string().optional(),
+  comment: yup.string().optional(),
+})
+
+const { handleSubmit, isSubmitting: formSubmitting, meta } = useForm({ validationSchema: schema })
+
+const { value: name, errorMessage: nameError } = useField<string>('name')
+const { value: contact, errorMessage: contactError } = useField<string>('contact')
+const { value: grade } = useField<string>('grade')
+const { value: goal } = useField<string>('goal')
+const { value: country } = useField<string>('country')
+const { value: comment } = useField<string>('comment')
+
+const onSubmit = handleSubmit(async (values) => {
+  store.form.name = values.name
+  store.form.contact = values.contact
+  store.form.grade = values.grade || ''
+  store.form.goal = values.goal || ''
+  store.form.country = values.country || ''
+  store.form.comment = values.comment || ''
+  await store.submitForm()
+})
 </script>
 
 <template lang="pug">
@@ -12,18 +52,19 @@ section#signup.signup-section
       h2.signup-title Записатись
       p.signup-subtitle Заповни форму, а я тобі напишу
 
-      form.signup-form(@submit.prevent="store.submitForm")
+      form.signup-form(@submit.prevent="onSubmit")
         // Name Input
         .form-group
           label(for="name") Ваше ім'я #[span.required *]
           input(
             type="text"
             id="name"
-            v-model="store.form.name"
+            v-model="name"
             placeholder="Введіть ваше ім'я"
-            :class="{ 'input-error': store.errors.name }"
+            :class="{ 'input-error': nameError }"
           )
-          span.error-msg(v-if="store.errors.name") {{ store.errors.name }}
+          transition(name="err")
+            span.error-msg(v-if="nameError") {{ nameError }}
 
         // Contact Input
         .form-group
@@ -31,16 +72,17 @@ section#signup.signup-section
           input(
             type="text"
             id="contact"
-            v-model="store.form.contact"
+            v-model="contact"
             placeholder="@username або +380..."
-            :class="{ 'input-error': store.errors.contact }"
+            :class="{ 'input-error': contactError }"
           )
-          span.error-msg(v-if="store.errors.contact") {{ store.errors.contact }}
+          transition(name="err")
+            span.error-msg(v-if="contactError") {{ contactError }}
 
         // Grade Select
         .form-group
           label(for="grade") Клас / Вік дитини
-          select(id="grade" v-model="store.form.grade")
+          select(id="grade" v-model="grade")
             option(value="" disabled selected) Оберіть варіант
             option(value="1-4") Молодша школа (1-4 класи)
             option(value="5-9") Середня школа (5-9 класи)
@@ -50,40 +92,44 @@ section#signup.signup-section
         // Goal Select
         .form-group
           label(for="goal") Мета навчання
-          select(id="goal" v-model="store.form.goal")
+          select(id="goal" v-model="goal")
             option(value="" disabled selected) Оберіть мету занять
             option(value="exams") Підготовка до іспитів (НМТ, ЗНО, SAT)
             option(value="school") Підтягнути шкільну програму
             option(value="adaptation") Адаптація за кордоном
             option(value="olympiad") Олімпіадна математика / Логіка
-        
+
         .form-group
           label(for="country") Програма навчання якої країни
-          select(id="country" v-model="store.form.country")
+          select(id="country" v-model="country")
             option(value="" disabled selected) Оберіть країну
             option(value="ukraine") Україна
             option(value="poland") Польща
             option(value="germany") Німеччина
             option(value="austria") Австрія
-            option(value="czech-republic") США
+            option(value="usa") США
 
         // Comment Input
         .form-group
           label(for="comment") Додатковий коментар (необов'язково)
           textarea(
             id="comment"
-            v-model="store.form.comment"
+            v-model="comment"
             rows="3"
             placeholder="Розкажіть трохи про ваші побажання або рівень знань..."
           )
 
         // Submit Button
-        button.btn.btn-primary.btn-submit(type="submit", :disabled="store.isSubmitting")
-          span.spinner(v-if="store.isSubmitting")
+        button.btn.btn-primary.btn-submit(
+          type="submit"
+          :disabled="store.isSubmitting || formSubmitting"
+        )
+          span.spinner(v-if="store.isSubmitting || formSubmitting")
           span(v-else) Надіслати заявку #[TutorIcon(name="arrow-right")]
 
         // Submit Error Message
-        span.error-msg.text-center(v-if="store.submitError") {{ store.submitError }}
+        transition(name="err")
+          span.error-msg.text-center(v-if="store.submitError") {{ store.submitError }}
 
       // Success Modal Overlay
       .success-overlay(v-if="store.isSubmitted")
@@ -192,6 +238,18 @@ section#signup.signup-section
   }
 }
 
+/* Error transition */
+.err-enter-active,
+.err-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.err-enter-from,
+.err-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -215,7 +273,7 @@ section#signup.signup-section
   font-weight: 700;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: #f1f5f9;
     transform: translateY(-2px);
   }
