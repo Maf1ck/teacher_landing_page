@@ -304,6 +304,7 @@ onBeforeUnmount(() => { if (ro && canvasRef.value) ro.unobserve(canvasRef.value)
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
+  container-type: inline-size;
 }
 
 // ── Canvas ─────────────────────────────────────────────────────
@@ -354,13 +355,14 @@ onBeforeUnmount(() => { if (ro && canvasRef.value) ro.unobserve(canvasRef.value)
   .tc { color: #94a3b8; }
 }
 
-// ── Controls row ───────────────────────────────────────────────
+// ── Controls row — завжди вертикально, щоб формула не стискалась ──
 .controls-row {
   display: flex;
+  flex-direction: column;
   gap: 16px;
   margin-bottom: 20px;
-  align-items: flex-start;
   width: 100%;
+  min-width: 0;
 }
 .ctrl-panel {
   background: #f8fafc;
@@ -368,6 +370,8 @@ onBeforeUnmount(() => { if (ro && canvasRef.value) ro.unobserve(canvasRef.value)
   border-radius: var(--radius-md);
   padding: 16px 20px;
   min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 .ctrl-label {
   font-size: 11px;
@@ -376,9 +380,9 @@ onBeforeUnmount(() => { if (ro && canvasRef.value) ro.unobserve(canvasRef.value)
   letter-spacing: 0.5px;
   color: var(--color-text-muted);
   margin: 0 0 10px;
+  text-align: left;
 }
 .expr-panel {
-  flex: 1;
   min-width: 0;
 }
 .input-expr-box {
@@ -388,6 +392,8 @@ onBeforeUnmount(() => { if (ro && canvasRef.value) ro.unobserve(canvasRef.value)
   border-radius: var(--radius-sm);
   background: white;
   padding: 0 12px;
+  width: 100%;
+  box-sizing: border-box;
   &:focus-within { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
 }
 .y-pfx {
@@ -409,22 +415,31 @@ onBeforeUnmount(() => { if (ro && canvasRef.value) ro.unobserve(canvasRef.value)
   width: 100%;
 }
 .bounds-panel {
-  flex: 0 0 auto;
+  width: 100%;
 }
 .bounds-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
+  width: 100%;
 }
 .bi {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 4px;
-  label { font-size: 11px; font-weight: 600; color: var(--color-text-muted); }
+  min-width: 0;
+  label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-align: center;
+    width: 100%;
+  }
   input {
     width: 100%;
     box-sizing: border-box;
-    padding: 8px;
+    padding: 8px 4px;
     border: 1.5px solid #cbd5e1;
     border-radius: var(--radius-sm);
     font-size: 13px;
@@ -438,14 +453,17 @@ onBeforeUnmount(() => { if (ro && canvasRef.value) ro.unobserve(canvasRef.value)
 // ── Presets ────────────────────────────────────────────────────
 .presets-area {
   margin-bottom: 16px;
+  width: 100%;
+  min-width: 0;
 }
 .presets-chips {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
   gap: 8px;
+  width: 100%;
 }
 .chip {
-  padding: 7px 14px;
+  padding: 7px 12px;
   border: 1.5px solid #cbd5e1;
   border-radius: 999px;
   background: white;
@@ -455,6 +473,11 @@ onBeforeUnmount(() => { if (ro && canvasRef.value) ro.unobserve(canvasRef.value)
   cursor: pointer;
   transition: all var(--transition-fast);
   white-space: nowrap;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
   &:hover { border-color: var(--color-primary); color: var(--color-primary); }
   &.active { background: var(--color-primary); border-color: var(--color-primary); color: white; }
 }
@@ -468,25 +491,21 @@ onBeforeUnmount(() => { if (ro && canvasRef.value) ro.unobserve(canvasRef.value)
   font-size: 12.5px;
   color: #1e40af;
   line-height: 1.6;
+  word-break: break-word;
   .hb-title { font-weight: 700; margin-right: 6px; }
 }
 
-// ── Responsive ────────────────────────────────────────────────
+@container (max-width: 420px) {
+  .bounds-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+}
+
 @media (max-width: 900px) {
   .canvas-card {
     height: 340px;
-    max-width: 100%; // full width on tablet
-  }
-  .controls-row {
-    flex-direction: column;
-  }
-  .bounds-panel {
-    flex: 1 1 auto;
-    width: 100%;
-  }
-  .bounds-row {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    max-width: 100%;
   }
 }
 
@@ -497,16 +516,15 @@ onBeforeUnmount(() => { if (ro && canvasRef.value) ro.unobserve(canvasRef.value)
     border-radius: var(--radius-sm);
   }
   .ctrl-panel {
-    width: 100%;
-    box-sizing: border-box;
+    padding: 14px 16px;
   }
-  .bounds-row {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+  .presets-chips {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .chip {
     font-size: 12px;
-    padding: 6px 11px;
+    padding: 6px 8px;
+    white-space: normal;
   }
   .handbook-row {
     font-size: 11.5px;

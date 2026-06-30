@@ -136,27 +136,38 @@ const svgPoint = computed(() => {
   line-height: 1.5;
 }
 
+.tool-view {
+  container-type: inline-size;
+}
+
 .trig-layout {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 32px;
+  grid-template-columns: 1fr;
+  gap: 24px;
   align-items: start;
+  width: 100%;
+  min-width: 0;
 }
 
 .trig-visual-card {
   background-color: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: var(--radius-md);
-  padding: 24px;
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .unit-circle-svg {
-  width: 240px;
-  height: 240px;
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  aspect-ratio: 1 / 1;
   background-color: white;
   border-radius: 50%;
   box-shadow: var(--shadow-sm);
@@ -165,29 +176,34 @@ const svgPoint = computed(() => {
 
 .angle-picker-wrap {
   width: 100%;
-  
+
   h4 {
     font-size: 14px;
     margin-bottom: 12px;
     color: var(--color-text-muted);
+    text-align: center;
   }
 }
 
 .angle-buttons-list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
+  width: 100%;
 }
 
 .angle-btn {
-  padding: 6px 12px;
+  width: 100%;
+  padding: 8px 6px;
   background-color: white;
   border: 1px solid #cbd5e1;
   border-radius: var(--radius-sm);
   font-size: 12px;
   font-weight: 600;
+  text-align: center;
   cursor: pointer;
   transition: all var(--transition-fast);
+  box-sizing: border-box;
 
   &:hover {
     border-color: var(--color-primary);
@@ -205,8 +221,11 @@ const svgPoint = computed(() => {
   background-color: white;
   border: 1.5px solid var(--color-primary-light);
   border-radius: var(--radius-md);
-  padding: 28px;
+  padding: 20px 16px;
   box-shadow: var(--shadow-sm);
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 
   h3 {
     font-size: 18px;
@@ -228,10 +247,11 @@ const svgPoint = computed(() => {
 }
 
 .val-row {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  padding: 10px 14px;
+  gap: 12px 20px;
+  padding: 12px 16px;
   border-radius: var(--radius-sm);
   background-color: #f8fafc;
 }
@@ -240,12 +260,15 @@ const svgPoint = computed(() => {
   font-size: 14px;
   font-weight: 600;
   color: var(--color-text-muted);
+  text-align: right;
 }
 
 .trig-fn-val {
   font-family: monospace;
   font-size: 16px;
   font-weight: 700;
+  text-align: left;
+  min-width: 72px;
 
   &.val-sin { color: #ef4444; }
   &.val-cos { color: #10b981; }
@@ -275,10 +298,27 @@ const svgPoint = computed(() => {
   }
 }
 
-@media (max-width: 1024px) {
+@container (min-width: 640px) {
   .trig-layout {
+    grid-template-columns: 1.2fr 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .angle-buttons-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .val-row {
     grid-template-columns: 1fr;
-    gap: 24px;
+    text-align: center;
+    gap: 6px;
+  }
+
+  .trig-fn-name,
+  .trig-fn-val {
+    text-align: center;
   }
 }
 </style>

@@ -32,7 +32,7 @@ const isMathPage = computed(() => {
 <template lang="pug">
 header.header
   .nav-container
-    a.logo(href="#", @click.prevent="navigateToSection('hero')") MATH_SOFI
+    a.logo(href="/", @click.prevent="navigateToSection('hero')", aria-label="MATH_SOFI — на головну") MATH_SOFI
     
     nav.nav-links(:class="{ 'nav-active': store.isMobileMenuOpen }")
       a(href="#about", @click.prevent="navigateToSection('about')") Про мене
@@ -83,6 +83,9 @@ header.header
     font-weight: 500;
     color: var(--color-text-muted);
     transition: color var(--transition-fast);
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
 
     &:hover {
       color: var(--color-primary);
@@ -104,9 +107,12 @@ header.header
 .btn-nav {
   background-color: var(--color-primary);
   color: white !important;
-  padding: 8px 20px;
+  padding: 10px 20px;
+  min-height: 44px;
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
 
   &:hover {
     background-color: var(--color-primary-hover);
@@ -121,6 +127,11 @@ header.header
   color: var(--color-text-dark);
   cursor: pointer;
   font-size: 24px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 1024px) {

@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import aboutImg from '../../assets/about.jpg'
-</script>
-
 <template lang="pug">
 section#about.about-section
   .container
@@ -10,7 +6,16 @@ section#about.about-section
       
       .about-grid
         .about-photo-wrapper
-          img.about-tutor-img(:src="aboutImg", alt="Соня")
+          img.about-tutor-img(
+            src="/about-400.webp"
+            srcset="/about-400.webp 400w, /about-700.webp 700w"
+            sizes="(max-width: 768px) 100vw, 350px"
+            alt="Соня — репетитор з математики MATH_SOFI"
+            width="350"
+            height="420"
+            loading="lazy"
+            decoding="async"
+          )
         
         .about-speech-bubbles
           .speech-bubble

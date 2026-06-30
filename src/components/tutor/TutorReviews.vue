@@ -24,7 +24,7 @@ section#reviews.reviews-section
           .quote-decorator “
           p.review-text-content {{ review.text }}
           .review-author-info
-            h4.review-author-name {{ review.author }}
+            p.review-author-name {{ review.author }}
             p.review-author-meta {{ review.subText }}
 
       button.carousel-control-btn.next(@click="store.nextReview", aria-label="Наступний відгук")
@@ -107,6 +107,7 @@ section#reviews.reviews-section
 
 .review-author-name {
   font-size: 16px;
+  font-weight: 700;
   margin-bottom: 2px;
 }
 
@@ -147,16 +148,31 @@ section#reviews.reviews-section
 }
 
 .dot-btn {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   border: none;
-  background-color: #cbd5e1;
+  background-color: transparent;
   cursor: pointer;
   transition: all var(--transition-fast);
   padding: 0;
+  position: relative;
 
-  &.active-dot {
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #94a3b8;
+    transition: all var(--transition-fast);
+  }
+
+  &.active-dot::after {
     background-color: var(--color-primary);
     width: 24px;
     border-radius: 5px;
@@ -169,8 +185,8 @@ section#reviews.reviews-section
   }
 
   .carousel-control-btn {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     font-size: 16px;
   }
 

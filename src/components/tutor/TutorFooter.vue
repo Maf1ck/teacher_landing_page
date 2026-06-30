@@ -21,26 +21,32 @@ const scrollToSection = (id: string) => {
   footer.footer
     .container.footer-grid
       .footer-left
-        h3.footer-logo MATH_SOFI
+        p.footer-logo MATH_SOFI
+        p.footer-author Репетитор: #[strong Соня] · 5+ років досвіду
         p.footer-social-title Мої соцмережі:
         .social-links-group
-          a.social-link-item(href="https://t.me/sofimath", target="_blank")
+          a.social-link-item(href="https://t.me/sofimath", target="_blank", rel="noopener noreferrer")
             TutorIcon(name="telegram")
             span Telegram: @sofimath
-          a.social-link-item(href="https://instagram.com/math_sofi", target="_blank")
+          a.social-link-item(href="https://instagram.com/math_sofi", target="_blank", rel="noopener noreferrer")
             TutorIcon(name="instagram")
             span Instagram: @math_sofi
-          a.social-link-item(href="https://tiktok.com/@math_sofi", target="_blank")
+          a.social-link-item(href="https://tiktok.com/@math_sofi", target="_blank", rel="noopener noreferrer")
             TutorIcon(name="tiktok")
             span TikTok: @math_sofi
 
       .footer-right
         .footer-nav
-          h4 Навігація
+          p.footer-nav-title Навігація
           a(href="#about", @click.prevent="scrollToSection('about')") Про мене
           a(href="#services", @click.prevent="scrollToSection('services')") З чим допомагаю
           a(href="#cases", @click.prevent="scrollToSection('cases')") Кейси
           a(href="#reviews", @click.prevent="scrollToSection('reviews')") Відгуки
+          a(href="#consultation", @click.prevent="scrollToSection('consultation')") Консультація
+        .footer-legal
+          p.footer-nav-title Юридична інформація
+          a(href="/privacy.html") Політика конфіденційності
+          a(href="/terms.html") Умови користування
         p.copyright-text © 2026 MATH_SOFI. Всі права захищено.
 </template>
 
@@ -76,7 +82,7 @@ const scrollToSection = (id: string) => {
 .ticker-item {
   font-size: 13px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.95);
+  color: #f8fafc;
   padding: 0 40px;
   white-space: nowrap;
 }
@@ -105,15 +111,28 @@ const scrollToSection = (id: string) => {
 
 .footer-logo {
   color: white;
+  font-family: var(--font-heading);
   font-size: 28px;
-  margin-bottom: 24px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.footer-author {
+  font-size: 15px;
+  color: #e2e8f0;
+  margin-bottom: 20px;
+
+  strong {
+    font-weight: 700;
+    color: white;
+  }
 }
 
 .footer-social-title {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 16px;
-  color: rgba(255, 255, 255, 0.85);
+  color: #e2e8f0;
 }
 
 .social-links-group {
@@ -127,7 +146,8 @@ const scrollToSection = (id: string) => {
   align-items: center;
   gap: 8px;
   font-size: 15px;
-  color: rgba(255, 255, 255, 0.9);
+  color: #f1f5f9;
+  min-height: 44px;
   transition: color var(--transition-fast);
 
   &:hover {
@@ -141,34 +161,42 @@ const scrollToSection = (id: string) => {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
+  gap: 24px;
 }
 
-.footer-nav {
+.footer-nav,
+.footer-legal {
   display: flex;
   flex-direction: column;
   gap: 10px;
   align-items: flex-end;
+}
 
-  h4 {
-    font-size: 16px;
-    color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 6px;
-  }
+.footer-nav-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 6px;
+}
 
-  a {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.9);
+.footer-nav a,
+.footer-legal a {
+  font-size: 14px;
+  color: #f1f5f9;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 
-    &:hover {
-      text-decoration: underline;
-    }
+  &:hover {
+    text-decoration: underline;
+    color: white;
   }
 }
 
 .copyright-text {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
-  margin-top: 30px;
+  font-size: 13px;
+  color: #cbd5e1;
+  margin-top: 10px;
 }
 
 @media (max-width: 768px) {
@@ -181,12 +209,9 @@ const scrollToSection = (id: string) => {
     align-items: flex-start;
   }
 
-  .footer-nav {
+  .footer-nav,
+  .footer-legal {
     align-items: flex-start;
-  }
-
-  .copyright-text {
-    margin-top: 20px;
   }
 }
 </style>

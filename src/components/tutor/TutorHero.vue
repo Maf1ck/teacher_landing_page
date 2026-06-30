@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import heroImg from '../../assets/hero.png'
 import TutorIcon from './TutorIcon.vue'
 
 const scrollToSection = (id: string) => {
@@ -13,7 +12,7 @@ const scrollToSection = (id: string) => {
 <template lang="pug">
 section#hero.hero-section
   .container.hero-grid
-    .hero-content.fade-in
+    .hero-content
       h1.hero-title РЕПЕТИТОР З #[span.highlight-blue МАТЕМАТИКИ]
       p.hero-desc Працюю з учнями з України, Польщі, Німеччини та США. Знаю як важко розібратися в новій шкільній програмі, коли ще не до кінця розумієш мову або коли вчорашня «п'ятірка» різко перетворюється на тривожні оцінки.
       .hero-cta-group
@@ -22,7 +21,16 @@ section#hero.hero-section
 
     .hero-image-wrapper
       .hero-image-circle
-        img.tutor-hero-img(:src="heroImg", alt="Софія — Репетитор з математики")
+        img.tutor-hero-img(
+          src="/hero-400.webp"
+          srcset="/hero-400.webp 400w, /hero-800.webp 800w"
+          sizes="(max-width: 768px) 290px, (max-width: 1150px) 330px, 440px"
+          alt="Соня — репетитор з математики, онлайн-заняття для учнів 7–11 класів"
+          width="440"
+          height="440"
+          fetchpriority="high"
+          decoding="sync"
+        )
       
       .badge.badge-1
         .badge-icon-box
@@ -61,6 +69,7 @@ section#hero.hero-section
   line-height: 1.15;
   margin-bottom: 24px;
   letter-spacing: -1px;
+  min-height: 2.3em;
 }
 
 .hero-desc {
@@ -95,6 +104,7 @@ section#hero.hero-section
 .hero-image-circle {
   width: calc(var(--cr) * 2);
   height: calc(var(--cr) * 2);
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
   overflow: hidden;
@@ -188,6 +198,7 @@ section#hero.hero-section
   justify-content: center;
   gap: 8px;
   padding: 12px 24px;
+  min-height: 44px;
   border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 16px;

@@ -1,35 +1,46 @@
 <script setup lang="ts">
+import { computed, defineAsyncComponent } from 'vue'
 import { useTutorStore } from '../stores/tutor'
 import TutorHeader from '../components/tutor/TutorHeader.vue'
 import TutorFooter from '../components/tutor/TutorFooter.vue'
 import TutorIcon from '../components/tutor/TutorIcon.vue'
 
-// Import modular tool views
-import MathQuadratic from '../components/tutor/MathQuadratic.vue'
-import MathPercentage from '../components/tutor/MathPercentage.vue'
-import MathTrigCircle from '../components/tutor/MathTrigCircle.vue'
-import MathRightTriangle from '../components/tutor/MathRightTriangle.vue'
-import MathGraphPlotter from '../components/tutor/MathGraphPlotter.vue'
-import MathFormulas from '../components/tutor/MathFormulas.vue'
+const MathQuadratic = defineAsyncComponent(() => import('../components/tutor/MathQuadratic.vue'))
+const MathPercentage = defineAsyncComponent(() => import('../components/tutor/MathPercentage.vue'))
+const MathTrigCircle = defineAsyncComponent(() => import('../components/tutor/MathTrigCircle.vue'))
+const MathRightTriangle = defineAsyncComponent(() => import('../components/tutor/MathRightTriangle.vue'))
+const MathGraphPlotter = defineAsyncComponent(() => import('../components/tutor/MathGraphPlotter.vue'))
+const MathFormulas = defineAsyncComponent(() => import('../components/tutor/MathFormulas.vue'))
 
 const store = useTutorStore()
 
-// Tabs definition
 const tabs = [
   { id: 'math-quadratic', label: 'Квадратні рівняння', icon: 'lightning' },
   { id: 'math-percentage', label: 'Калькулятор відсотків', icon: 'percent' },
   { id: 'math-trig-circle', label: 'Тригонометричне коло', icon: 'circle' },
   { id: 'math-right-triangle', label: 'Прямокутний трикутник', icon: 'ruler' },
   { id: 'math-graph-plotter', label: 'Побудова графіків', icon: 'chart' },
-  { id: 'math-formulas', label: 'Довідник формул', icon: 'lightbulb' }
+  { id: 'math-formulas', label: 'Довідник формул', icon: 'lightbulb' },
 ] as const
+
+const activeTool = computed(() => {
+  switch (store.currentPage) {
+    case 'math-quadratic': return MathQuadratic
+    case 'math-percentage': return MathPercentage
+    case 'math-trig-circle': return MathTrigCircle
+    case 'math-right-triangle': return MathRightTriangle
+    case 'math-graph-plotter': return MathGraphPlotter
+    case 'math-formulas': return MathFormulas
+    default: return MathQuadratic
+  }
+})
 </script>
 
 <template lang="pug">
 .tools-page
   TutorHeader
 
-  main.tools-main.fade-in
+  main.tools-main
     .container
       .tools-container-card
         //- Sidebar Navigation
@@ -56,12 +67,7 @@ const tabs = [
 
         //- Main Work Area
         section.tools-content-area
-          MathQuadratic(v-if="store.currentPage === 'math-quadratic'")
-          MathPercentage(v-else-if="store.currentPage === 'math-percentage'")
-          MathTrigCircle(v-else-if="store.currentPage === 'math-trig-circle'")
-          MathRightTriangle(v-else-if="store.currentPage === 'math-right-triangle'")
-          MathGraphPlotter(v-else-if="store.currentPage === 'math-graph-plotter'")
-          MathFormulas(v-else-if="store.currentPage === 'math-formulas'")
+          component(:is="activeTool" :key="store.currentPage")
 
   TutorFooter
 </template>
@@ -86,8 +92,10 @@ const tabs = [
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   border: 1px solid rgba(226, 232, 240, 0.8);
-  overflow: hidden;
+  overflow: clip;
   min-height: 650px;
+  min-width: 0;
+  width: 100%;
 }
 
 /* Sidebar styling */
@@ -188,11 +196,19 @@ const tabs = [
 
 /* Main Content Area styling */
 .tools-content-area {
-  padding: 40px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  padding: 32px;
+  overflow-x: auto;
+  overflow-y: visible;
   min-width: 0;
   box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
+.tools-main {
+  flex-grow: 1;
+  padding: 40px 0;
+  min-width: 0;
   width: 100%;
 }
 
@@ -202,24 +218,9 @@ const tabs = [
   }
 }
 
-@media (max-width: 900px) {
-  .tools-container-card {
-    grid-template-columns: 200px 1fr;
-  }
-
-  .sidebar-tab-btn {
-    font-size: 13px;
-    padding: 10px 12px;
-  }
-}
-
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .tools-container-card {
     grid-template-columns: 1fr;
-  }
-
-  .tools-content-area {
-    padding: 20px 16px;
   }
 
   .tools-sidebar {
@@ -253,7 +254,7 @@ const tabs = [
     height: 100%;
     color: var(--color-text-muted);
     transition: all var(--transition-fast);
-    
+
     .tab-icon {
       font-size: 20px;
       margin: 0;
@@ -284,7 +285,17 @@ const tabs = [
   }
 
   .tools-content-area {
-    padding: 24px 16px;
+    padding: 20px 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tools-content-area {
+    padding: 16px 12px;
+  }
+
+  .tools-main {
+    padding: 24px 0;
   }
 }
 </style>

@@ -1,12 +1,127 @@
 <!doctype html>
-<html lang="en">
+<html lang="uk">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>teacher</title>
+
+    <title>Репетитор з математики Соня | Підготовка до НМТ та міжнародних іспитів</title>
+    <meta
+      name="description"
+      content="Онлайн-репетитор з математики для учнів 7–11 класів. Підготовка до НМТ, SAT, Abitur та адаптація за кордоном. Безкоштовна консультація 30 хв."
+    />
+    <meta
+      name="keywords"
+      content="репетитор з математики, підготовка до НМТ, онлайн репетитор, математика 7-11 клас, SAT математика, Abitur"
+    />
+    <meta name="author" content="Соня — MATH_SOFI" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#2563eb" />
+
+    <link rel="canonical" href="https://mathsofi.com/" />
+    <link rel="alternate" hreflang="uk" href="https://mathsofi.com/" />
+    <link rel="alternate" hreflang="x-default" href="https://mathsofi.com/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MATH_SOFI" />
+    <meta property="og:locale" content="uk_UA" />
+    <meta property="og:title" content="Репетитор з математики Соня | Підготовка до НМТ та міжнародних іспитів" />
+    <meta
+      property="og:description"
+      content="Онлайн-репетитор з математики для учнів 7–11 класів. Підготовка до НМТ, SAT, Abitur та адаптація за кордоном. Безкоштовна консультація 30 хв."
+    />
+    <meta property="og:url" content="https://mathsofi.com/" />
+    <meta property="og:image" content="https://mathsofi.com/og-image.webp" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Соня — репетитор з математики MATH_SOFI" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Репетитор з математики Соня | Підготовка до НМТ та міжнародних іспитів" />
+    <meta
+      name="twitter:description"
+      content="Онлайн-репетитор з математики для учнів 7–11 класів. Підготовка до НМТ, SAT, Abitur та адаптація за кордоном."
+    />
+    <meta name="twitter:image" content="https://mathsofi.com/og-image.webp" />
+    <meta name="twitter:site" content="@math_sofi" />
+    <meta name="twitter:creator" content="@math_sofi" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+    />
+
+    <link
+      rel="preload"
+      as="image"
+      href="/hero-400.webp"
+      type="image/webp"
+      fetchpriority="high"
+      media="(max-width: 768px)"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/hero-800.webp"
+      type="image/webp"
+      fetchpriority="high"
+      media="(min-width: 769px)"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://mathsofi.com/#person",
+            "name": "Соня",
+            "alternateName": "Sofia",
+            "jobTitle": "Репетитор з математики",
+            "description": "Репетитор з математики з досвідом 5+ років. Підготовка до НМТ, міжнародних іспитів та адаптація учнів за кордоном.",
+            "url": "https://mathsofi.com/",
+            "image": "https://mathsofi.com/hero.webp",
+            "sameAs": [
+              "https://t.me/sofimath",
+              "https://instagram.com/math_sofi",
+              "https://tiktok.com/@math_sofi"
+            ],
+            "knowsAbout": ["Математика", "НМТ", "SAT", "Abitur", "Шкільна програма"]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://mathsofi.com/#website",
+            "url": "https://mathsofi.com/",
+            "name": "MATH_SOFI",
+            "inLanguage": "uk",
+            "publisher": { "@id": "https://mathsofi.com/#person" }
+          },
+          {
+            "@type": "ProfessionalService",
+            "@id": "https://mathsofi.com/#service",
+            "name": "MATH_SOFI",
+            "url": "https://mathsofi.com/",
+            "provider": { "@id": "https://mathsofi.com/#person" },
+            "areaServed": ["Україна", "Польща", "Німеччина", "США"],
+            "serviceType": "Репетиторство з математики",
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "customer service",
+              "url": "https://t.me/sofimath",
+              "availableLanguage": ["Ukrainian", "English"]
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
+    <style>
+      body { margin: 0; background: #f8fafc; color: #0f172a; }
+      #app { min-height: 100vh; }
+    </style>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>

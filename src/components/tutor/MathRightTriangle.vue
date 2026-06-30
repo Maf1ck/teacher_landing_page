@@ -334,22 +334,31 @@ const solvedTriangle = computed(() => {
   line-height: 1.5;
 }
 
+.tool-view {
+  container-type: inline-size;
+}
+
 .solver-grid {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1fr;
   gap: 24px;
   margin-bottom: 32px;
   align-items: stretch;
+  width: 100%;
+  min-width: 0;
 }
 
 .solver-input-card {
   background-color: #f8fafc;
   border-radius: var(--radius-md);
-  padding: 24px;
+  padding: 20px 16px;
   border: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .mode-select-group {
@@ -368,6 +377,8 @@ const solvedTriangle = computed(() => {
 }
 
 .mode-dropdown {
+  width: 100%;
+  max-width: 100%;
   padding: 12px;
   border: 1.5px solid #cbd5e1;
   border-radius: var(--radius-sm);
@@ -378,6 +389,7 @@ const solvedTriangle = computed(() => {
   outline: none;
   cursor: pointer;
   transition: all var(--transition-fast);
+  box-sizing: border-box;
 
   &:focus {
     border-color: var(--color-primary);
@@ -391,8 +403,9 @@ const solvedTriangle = computed(() => {
 
 .inputs-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+  width: 100%;
 }
 
 .input-group {
@@ -446,12 +459,17 @@ const solvedTriangle = computed(() => {
   align-items: center;
   justify-content: center;
   padding: 16px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .triangle-svg {
   width: 100%;
   max-width: 240px;
   height: auto;
+  display: block;
 }
 
 .triangle-shape {
@@ -492,8 +510,9 @@ const solvedTriangle = computed(() => {
 
 .results-grid-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
   gap: 16px;
+  width: 100%;
 }
 
 .result-info-card {
@@ -505,6 +524,8 @@ const solvedTriangle = computed(() => {
   flex-direction: column;
   gap: 6px;
   box-shadow: var(--shadow-sm);
+  min-width: 0;
+  box-sizing: border-box;
 
   .result-label {
     font-size: 12px;
@@ -564,18 +585,26 @@ const solvedTriangle = computed(() => {
   color: var(--color-text-dark);
 }
 
-@media (max-width: 768px) {
+@container (min-width: 560px) {
   .solver-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1.2fr 0.8fr;
   }
+}
 
-  .diagram-card {
-    height: 200px;
-  }
-
+@container (max-width: 400px) {
   .inputs-row {
     grid-template-columns: 1fr;
     gap: 12px;
+  }
+
+  .results-grid-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .diagram-card {
+    min-height: 180px;
   }
 }
 </style>
