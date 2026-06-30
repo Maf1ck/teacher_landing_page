@@ -21,7 +21,7 @@ div
     .watermark-bg КОНСУЛЬТАЦІЯ
     .container.relative-z
       h2.section-title.text-center КОНСУЛЬТАЦІЯ
-      p.section-subtitle.text-center Ваша дитина губиться в математиці, і Ви не знаєте, з чого почати? Почнімо з простого — з розуміння ситуації, тому я пропоную #[span.highlight-underline безкоштовну консультацію].
+      p.section-subtitle.text-center Ваша дитина губиться в математиці, і Ви не знаєте, з чого почати? Почнімо з простого — з розуміння ситуації, тому я пропоную #[span.highlight-underline(@click="scrollToSection('signup')") безкоштовну консультацію].
 
       h3.sub-section-title.text-center ЗА 30-35 ХВИЛИН МИ:
       .consultation-grid
@@ -109,9 +109,14 @@ div
 }
 
 .highlight-underline {
+  cursor: pointer;
   font-weight: 700;
   color: var(--color-primary);
   border-bottom: 2px solid var(--color-primary);
+}
+.highlight-underline:hover {
+  color: var(--color-primary-hover);
+  border-bottom: 2px solid var(--color-primary-hover);
 }
 
 .sub-section-title {

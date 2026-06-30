@@ -9,6 +9,7 @@ export const useTutorStore = defineStore('tutor', {
     activeReview: 0,
     isSubmitting: false,
     isSubmitted: false,
+    pendingNavSection: null as string | null,
     
     // Cases Data
     cases: [
@@ -238,8 +239,11 @@ export const useTutorStore = defineStore('tutor', {
 
     setCurrentPage(page: 'landing' | 'math-quadratic' | 'math-percentage' | 'math-trig-circle' | 'math-right-triangle' | 'math-graph-plotter' | 'math-formulas') {
       this.currentPage = page
-      // Reset scroll on view change
       window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
-    }
+    },
+
+    clearPendingNavSection() {
+      this.pendingNavSection = null
+    },
   }
 })

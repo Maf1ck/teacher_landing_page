@@ -18,12 +18,12 @@ const TutorSignup = defineAsyncComponent(() => import('./TutorSignup.vue'))
   TutorHeader
   main#main-content
     TutorHero
-    LazySection(:component="TutorAbout" min-height="520px")
-    LazySection(:component="TutorServices" min-height="480px")
-    LazySection(:component="TutorConsultation" min-height="640px")
-    LazySection(:component="TutorCases" min-height="420px")
-    LazySection(:component="TutorReviews" min-height="380px")
-    LazySection(:component="TutorSignup" min-height="560px" root-margin="400px 0px")
+    LazySection(:component="TutorAbout" section-id="about" min-height="520px")
+    LazySection(:component="TutorServices" section-id="services" min-height="480px")
+    LazySection(:component="TutorConsultation" section-id="consultation" min-height="640px")
+    LazySection(:component="TutorCases" section-id="cases" min-height="420px")
+    LazySection(:component="TutorReviews" section-id="reviews" min-height="380px")
+    LazySection(:component="TutorSignup" section-id="signup" min-height="560px" root-margin="400px 0px")
   TutorFooter
 </template>
 
@@ -33,5 +33,6 @@ const TutorSignup = defineAsyncComponent(() => import('./TutorSignup.vue'))
   display: flex;
   flex-direction: column;
   background-color: var(--color-bg-page);
+  padding-top: var(--header-height);
 }
 </style>

@@ -142,6 +142,7 @@ div
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   margin-bottom: 8px;
 }
 
@@ -150,14 +151,22 @@ div
   font-weight: 700;
   font-size: 18px;
   color: var(--color-text-dark);
+  min-width: 0;
 }
 
 .tab-student-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.25;
+  flex-shrink: 0;
+  max-width: 110px;
   font-size: 11px;
   font-weight: 600;
   color: var(--color-primary);
   background-color: var(--color-primary-light);
-  padding: 2px 8px;
+  padding: 4px 10px;
   border-radius: 12px;
 }
 
@@ -185,7 +194,8 @@ div
 .case-details-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  gap: 16px;
   border-bottom: 1px solid #e2e8f0;
   padding-bottom: 20px;
   margin-bottom: 24px;
@@ -202,12 +212,19 @@ div
 }
 
 .case-detail-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.25;
+  flex-shrink: 0;
   background-color: var(--color-primary);
   color: white;
-  padding: 6px 14px;
+  padding: 8px 14px;
   border-radius: 50px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
+  max-width: 130px;
 }
 
 .case-progress-stats {
@@ -299,6 +316,16 @@ div
 }
 
 @media (max-width: 480px) {
+  .case-details-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .case-detail-badge {
+    align-self: center;
+    max-width: 160px;
+  }
+
   .case-details-card {
     padding: 24px 16px;
   }

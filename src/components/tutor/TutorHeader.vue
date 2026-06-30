@@ -5,41 +5,60 @@ import TutorIcon from './TutorIcon.vue'
 
 const store = useTutorStore()
 
-const navigateToSection = (id: string) => {
-  store.closeMobileMenu()
-  if (store.currentPage !== 'landing') {
-    store.setCurrentPage('landing')
-    nextTick(() => {
-      setTimeout(() => {
-        const element = document.getElementById(id)
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' })
-        }
-      }, 100)
-    })
-  } else {
-    const element = document.getElementById(id)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-    }
+const scrollToSection = (id: string, attempt = 0) => {
+  const element = document.getElementById(id)
+  if (element) {
+    store.clearPendingNavSection()
+    element.scrollIntoView({ behavior: 'smooth' })
+    return
+  }
+
+  if (attempt < 30) {
+    setTimeout(() => scrollToSection(id, attempt + 1), 50)
   }
 }
+
+const navigateToSection = (id: string) => {
+  store.closeMobileMenu()
+  store.pendingNavSection = id
+
+  if (store.currentPage !== 'landing') {
+    store.setCurrentPage('landing')
+    nextTick(() => scrollToSection(id))
+  } else {
+    scrollToSection(id)
+  }
+}
+
+const openCalculators = () => {
+  store.closeMobileMenu()
+  store.clearPendingNavSection()
+  store.setCurrentPage('math-quadratic')
+}
+
 const isMathPage = computed(() => {
-  return ['math-quadratic', 'math-percentage', 'math-trig-circle', 'math-right-triangle', 'math-graph-plotter', 'math-formulas'].includes(store.currentPage)
+  return [
+    'math-quadratic',
+    'math-percentage',
+    'math-trig-circle',
+    'math-right-triangle',
+    'math-graph-plotter',
+    'math-formulas',
+  ].includes(store.currentPage)
 })
 </script>
 
 <template lang="pug">
 header.header
   .nav-container
-    a.logo(href="/", @click.prevent="navigateToSection('hero')", aria-label="MATH_SOFI — на головну") MATH_SOFI
-    
+    a.logo(href="#hero", @click.prevent="navigateToSection('hero')", aria-label="MATH_SOFI — на головну") MATH_SOFI
+
     nav.nav-links(:class="{ 'nav-active': store.isMobileMenuOpen }")
       a(href="#about", @click.prevent="navigateToSection('about')") Про мене
       a(href="#services", @click.prevent="navigateToSection('services')") З чим допомагаю
       a(href="#cases", @click.prevent="navigateToSection('cases')") Кейси
       a(href="#reviews", @click.prevent="navigateToSection('reviews')") Відгуки
-      a.nav-highlight(href="#tools", :class="{ 'active': isMathPage }", @click.prevent="store.setCurrentPage('math-quadratic')") Калькулятори
+      a.nav-highlight(href="#tools", :class="{ active: isMathPage }", @click.prevent="openCalculators") Калькулятори
       a(href="#consultation", @click.prevent="navigateToSection('consultation')") Консультація
       a.btn-nav(href="#signup", @click.prevent="navigateToSection('signup')") Записатись
 
@@ -49,10 +68,16 @@ header.header
 
 <style scoped lang="scss">
 .header {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1200px;
+  z-index: 200;
+  background-color: rgba(248, 250, 252, 0.97);
   backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
   padding: 16px 0;
 }
 
@@ -94,13 +119,9 @@ header.header
 }
 
 .nav-highlight {
-  color: var(--color-primary) !important;
-  font-weight: 600 !important;
-  border-bottom: 2px solid transparent;
-  padding-bottom: 2px;
-  
-  &:hover, &.active {
-    border-bottom-color: var(--color-primary) !important;
+  &.active {
+    color: var(--color-primary) !important;
+    font-weight: 600 !important;
   }
 }
 
@@ -136,8 +157,8 @@ header.header
 
 @media (max-width: 1024px) {
   .burger-menu {
-    display: block;
-    z-index: 101;
+    display: flex;
+    z-index: 201;
   }
 
   .nav-links {
@@ -146,11 +167,11 @@ header.header
     right: 0;
     width: 300px;
     height: 100vh;
-    background-color: var(--color-bg-card);;
+    background-color: var(--color-bg-card);
     flex-direction: column;
     padding: 100px 32px 32px;
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.08);
-    z-index: 100;
+    z-index: 200;
     transform: translateX(100%);
     transition: transform var(--transition-normal);
     align-items: flex-start;
@@ -167,8 +188,13 @@ header.header
   }
 
   .btn-nav {
+    width: 100%;
+    justify-content: center;
     text-align: center;
-    margin-top: 12px;
+    margin-top: 16px;
+    padding: 12px 20px;
+    font-weight: 600;
+    box-sizing: border-box;
   }
 }
 </style>

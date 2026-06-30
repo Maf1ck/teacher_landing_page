@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, type Component } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick, type Component } from 'vue'
+import { useTutorStore } from '../../stores/tutor'
 
 const props = withDefaults(
   defineProps<{
     component: Component
+    sectionId: string
     minHeight?: string
     rootMargin?: string
   }>(),
@@ -13,15 +15,20 @@ const props = withDefaults(
   },
 )
 
-const visible = ref(false)
+const store = useTutorStore()
+const intersected = ref(false)
 const root = ref<HTMLElement | null>(null)
 let observer: IntersectionObserver | null = null
+
+const visible = computed(
+  () => intersected.value || store.pendingNavSection === props.sectionId,
+)
 
 onMounted(() => {
   observer = new IntersectionObserver(
     ([entry]) => {
       if (entry?.isIntersecting) {
-        visible.value = true
+        intersected.value = true
         observer?.disconnect()
       }
     },
@@ -30,6 +37,16 @@ onMounted(() => {
 
   if (root.value) {
     observer.observe(root.value)
+  }
+})
+
+watch(visible, async (isVisible) => {
+  if (!isVisible || store.pendingNavSection !== props.sectionId) return
+  await nextTick()
+  const el = document.getElementById(props.sectionId)
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' })
+    store.clearPendingNavSection()
   }
 })
 

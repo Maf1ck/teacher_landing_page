@@ -36,17 +36,18 @@ const scrollToSection = (id: string) => {
             span TikTok: @math_sofi
 
       .footer-right
-        .footer-nav
-          p.footer-nav-title Навігація
-          a(href="#about", @click.prevent="scrollToSection('about')") Про мене
-          a(href="#services", @click.prevent="scrollToSection('services')") З чим допомагаю
-          a(href="#cases", @click.prevent="scrollToSection('cases')") Кейси
-          a(href="#reviews", @click.prevent="scrollToSection('reviews')") Відгуки
-          a(href="#consultation", @click.prevent="scrollToSection('consultation')") Консультація
-        .footer-legal
-          p.footer-nav-title Юридична інформація
-          a(href="/privacy.html") Політика конфіденційності
-          a(href="/terms.html") Умови користування
+        .footer-links-row
+          .footer-nav
+            p.footer-nav-title Навігація
+            a(href="#about", @click.prevent="scrollToSection('about')") Про мене
+            a(href="#services", @click.prevent="scrollToSection('services')") З чим допомагаю
+            a(href="#cases", @click.prevent="scrollToSection('cases')") Кейси
+            a(href="#reviews", @click.prevent="scrollToSection('reviews')") Відгуки
+            a(href="#consultation", @click.prevent="scrollToSection('consultation')") Консультація
+          .footer-legal
+            p.footer-nav-title Юридична інформація
+            a(href="/privacy.html") Політика конфіденційності
+            a(href="/terms.html") Умови користування
         p.copyright-text © 2026 MATH_SOFI. Всі права захищено.
 </template>
 
@@ -104,9 +105,99 @@ const scrollToSection = (id: string) => {
 }
 
 .footer-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.footer-left {
+  min-width: 0;
+}
+
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.footer-links-row {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.footer-nav,
+.footer-legal {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-nav-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 8px;
+}
+
+.footer-nav a,
+.footer-legal a {
+  font-size: 14px;
+  color: #f1f5f9;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  transition: color var(--transition-fast);
+
+  &:hover {
+    text-decoration: underline;
+    color: white;
+  }
+}
+
+.copyright-text {
+  font-size: 13px;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+@media (min-width: 769px) {
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px 60px;
+    align-items: start;
+  }
+
+  .footer-right {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .footer-links-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    width: 100%;
+  }
+
+  .footer-nav,
+  .footer-legal {
+    align-items: flex-end;
+  }
+
+  .footer-nav a,
+  .footer-legal a {
+    width: auto;
+    justify-content: flex-end;
+  }
+
+  .copyright-text {
+    text-align: right;
+    width: 100%;
+  }
 }
 
 .footer-logo {
@@ -153,65 +244,6 @@ const scrollToSection = (id: string) => {
   &:hover {
     color: white;
     text-decoration: underline;
-  }
-}
-
-.footer-right {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 24px;
-}
-
-.footer-nav,
-.footer-legal {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: flex-end;
-}
-
-.footer-nav-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #e2e8f0;
-  margin-bottom: 6px;
-}
-
-.footer-nav a,
-.footer-legal a {
-  font-size: 14px;
-  color: #f1f5f9;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-
-  &:hover {
-    text-decoration: underline;
-    color: white;
-  }
-}
-
-.copyright-text {
-  font-size: 13px;
-  color: #cbd5e1;
-  margin-top: 10px;
-}
-
-@media (max-width: 768px) {
-  .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-
-  .footer-right {
-    align-items: flex-start;
-  }
-
-  .footer-nav,
-  .footer-legal {
-    align-items: flex-start;
   }
 }
 </style>

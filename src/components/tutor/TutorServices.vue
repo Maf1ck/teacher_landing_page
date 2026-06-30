@@ -16,8 +16,7 @@ section#services.services-section
       // Title Card
       .service-card.title-card(@click="scrollToSection('signup')")
         h2.service-title-text З ЧИМ Я ДОПОМАГАЮ
-        .service-arrow
-          TutorIcon(name="arrow-up-right")
+          
 
       // Card 1
       .service-card

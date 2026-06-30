@@ -1,8 +1,33 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue'
 import { useTutorStore } from '../../stores/tutor'
 import TutorIcon from './TutorIcon.vue'
 
 const store = useTutorStore()
+
+const TRUNCATE_CHARS = 140
+const expandedReviews = ref<Set<number>>(new Set())
+
+const isLongReview = (text: string) => text.length > TRUNCATE_CHARS
+
+const isExpanded = (index: number) => expandedReviews.value.has(index)
+
+const toggleExpand = (index: number) => {
+  const next = new Set(expandedReviews.value)
+  if (next.has(index)) {
+    next.delete(index)
+  } else {
+    next.add(index)
+  }
+  expandedReviews.value = next
+}
+
+watch(
+  () => store.activeReview,
+  () => {
+    expandedReviews.value = new Set()
+  },
+)
 </script>
 
 <template lang="pug">
@@ -14,7 +39,7 @@ section#reviews.reviews-section
     .carousel-outer-wrapper
       button.carousel-control-btn.prev(@click="store.prevReview", aria-label="Попередній відгук")
         TutorIcon(name="chevron-left")
-      
+
       .carousel-inner-container
         .review-slide-card(
           v-for="(review, index) in store.reviews"
@@ -22,7 +47,18 @@ section#reviews.reviews-section
           v-show="store.activeReview === index"
         )
           .quote-decorator “
-          p.review-text-content {{ review.text }}
+          .review-body
+            p.review-text-content(
+              :class="{
+                collapsed: isLongReview(review.text) && !isExpanded(index),
+                expanded: isLongReview(review.text) && isExpanded(index),
+              }"
+            ) {{ review.text }}
+            button.read-more-btn(
+              v-if="isLongReview(review.text)"
+              type="button"
+              @click="toggleExpand(index)"
+            ) {{ isExpanded(index) ? 'Згорнути' : 'Читати далі' }}
           .review-author-info
             p.review-author-name {{ review.author }}
             p.review-author-meta {{ review.subText }}
@@ -67,10 +103,10 @@ section#reviews.reviews-section
 }
 
 .carousel-inner-container {
+  position: relative;
   flex: 1;
-  min-height: 220px;
-  display: flex;
-  align-items: center;
+  width: 100%;
+  min-height: 280px;
 }
 
 .review-slide-card {
@@ -79,8 +115,9 @@ section#reviews.reviews-section
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   border: 1px solid rgba(226, 232, 240, 0.8);
-  width: 100%;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 280px;
   animation: fadeIn 0.4s ease-out;
 }
 
@@ -95,14 +132,59 @@ section#reviews.reviews-section
   user-select: none;
 }
 
+.review-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+}
+
 .review-text-content {
   font-size: 18px;
   line-height: 1.6;
   color: var(--color-text-dark);
   font-style: italic;
-  margin-bottom: 24px;
-  position: relative;
-  z-index: 2;
+  margin: 0;
+  min-height: 6.4em;
+
+  &.collapsed {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 6.4em;
+  }
+
+  &.expanded {
+    min-height: 0;
+  }
+}
+
+.read-more-btn {
+  align-self: flex-start;
+  margin-top: 10px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  flex-shrink: 0;
+
+  &:hover {
+    color: var(--color-primary-hover);
+  }
+}
+
+.review-author-info {
+  flex-shrink: 0;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
 }
 
 .review-author-name {
@@ -143,15 +225,17 @@ section#reviews.reviews-section
 .carousel-dots {
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin-top: 16px;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  max-width: 100%;
+  margin: 16px auto 0;
+  padding: 0 4px;
 }
 
 .dot-btn {
-  width: 12px;
-  height: 12px;
-  min-width: 44px;
-  min-height: 44px;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
   border-radius: 50%;
   border: none;
   background-color: transparent;
@@ -174,20 +258,38 @@ section#reviews.reviews-section
 
   &.active-dot::after {
     background-color: var(--color-primary);
-    width: 24px;
+    width: 22px;
+    height: 10px;
     border-radius: 5px;
   }
 }
 
 @media (max-width: 768px) {
   .carousel-outer-wrapper {
-    gap: 12px;
+    gap: 8px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .carousel-inner-container,
+  .review-slide-card {
+    min-height: 240px;
   }
 
   .carousel-control-btn {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     font-size: 16px;
+  }
+
+  .carousel-dots {
+    gap: 4px 6px;
+    padding: 0;
+  }
+
+  .dot-btn {
+    width: 32px;
+    height: 32px;
   }
 
   .review-slide-card {
@@ -196,6 +298,12 @@ section#reviews.reviews-section
 
   .review-text-content {
     font-size: 15px;
+    min-height: 4.8em;
+
+    &.collapsed {
+      -webkit-line-clamp: 3;
+      min-height: 4.8em;
+    }
   }
 
   .section-title {

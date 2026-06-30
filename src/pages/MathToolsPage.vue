@@ -78,6 +78,7 @@ const activeTool = computed(() => {
   display: flex;
   flex-direction: column;
   background-color: var(--color-bg-page);
+  padding-top: var(--header-height);
 }
 
 .tools-main {

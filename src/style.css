@@ -27,6 +27,7 @@
   
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --header-height: 64px;
 }
 
 * {
@@ -61,7 +62,7 @@ body {
   margin: 0 auto;
   position: relative;
   background-color: var(--color-bg-page);
-  overflow-x: hidden;
+  overflow-x: clip;
   display: flex;
   flex-direction: column;
 }
