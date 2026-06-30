@@ -207,6 +207,9 @@ export const useTutorStore = defineStore('tutor', {
         const data = await response.json()
 
         if (!response.ok) {
+          if (response.status === 429) {
+            throw new Error(data.error || 'Можна надіслати не більше 3 заявок за 15 хвилин. Спробуйте пізніше.')
+          }
           throw new Error(data.error || 'Не вдалося надіслати заявку.')
         }
 
