@@ -49,10 +49,7 @@ section#reviews.reviews-section
           .quote-decorator “
           .review-body
             p.review-text-content(
-              :class="{
-                collapsed: isLongReview(review.text) && !isExpanded(index),
-                expanded: isLongReview(review.text) && isExpanded(index),
-              }"
+              :class="{ collapsed: isLongReview(review.text) && !isExpanded(index), expanded: isLongReview(review.text) && isExpanded(index) }"
             ) {{ review.text }}
             button.read-more-btn(
               v-if="isLongReview(review.text)"
