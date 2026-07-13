@@ -1,39 +1,33 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent } from 'vue'
-import { useTutorStore } from '../stores/tutor'
+import { useRoute, useRouter } from 'vue-router'
+import { TOOL_ROUTES, type ToolId } from '../router'
 import TutorHeader from '../components/tutor/TutorHeader.vue'
 import TutorFooter from '../components/tutor/TutorFooter.vue'
 import TutorIcon from '../components/tutor/TutorIcon.vue'
 
-const MathQuadratic = defineAsyncComponent(() => import('../components/tutor/MathQuadratic.vue'))
-const MathPercentage = defineAsyncComponent(() => import('../components/tutor/MathPercentage.vue'))
-const MathTrigCircle = defineAsyncComponent(() => import('../components/tutor/MathTrigCircle.vue'))
+const MathQuadratic    = defineAsyncComponent(() => import('../components/tutor/MathQuadratic.vue'))
+const MathPercentage   = defineAsyncComponent(() => import('../components/tutor/MathPercentage.vue'))
+const MathTrigCircle   = defineAsyncComponent(() => import('../components/tutor/MathTrigCircle.vue'))
 const MathRightTriangle = defineAsyncComponent(() => import('../components/tutor/MathRightTriangle.vue'))
 const MathGraphPlotter = defineAsyncComponent(() => import('../components/tutor/MathGraphPlotter.vue'))
-const MathFormulas = defineAsyncComponent(() => import('../components/tutor/MathFormulas.vue'))
+const MathFormulas     = defineAsyncComponent(() => import('../components/tutor/MathFormulas.vue'))
 
-const store = useTutorStore()
+const route  = useRoute()
+const router = useRouter()
 
-const tabs = [
-  { id: 'math-quadratic', label: 'Квадратні рівняння', icon: 'lightning' },
-  { id: 'math-percentage', label: 'Калькулятор відсотків', icon: 'percent' },
-  { id: 'math-trig-circle', label: 'Тригонометричне коло', icon: 'circle' },
-  { id: 'math-right-triangle', label: 'Прямокутний трикутник', icon: 'ruler' },
-  { id: 'math-graph-plotter', label: 'Побудова графіків', icon: 'chart' },
-  { id: 'math-formulas', label: 'Довідник формул', icon: 'lightbulb' },
-] as const
+const activeTool = computed<ToolId>(() => (route.meta.tool as ToolId) ?? 'math-quadratic')
 
-const activeTool = computed(() => {
-  switch (store.currentPage) {
-    case 'math-quadratic': return MathQuadratic
-    case 'math-percentage': return MathPercentage
-    case 'math-trig-circle': return MathTrigCircle
-    case 'math-right-triangle': return MathRightTriangle
-    case 'math-graph-plotter': return MathGraphPlotter
-    case 'math-formulas': return MathFormulas
-    default: return MathQuadratic
-  }
-})
+const componentMap: Record<ToolId, ReturnType<typeof defineAsyncComponent>> = {
+  'math-quadratic':     MathQuadratic,
+  'math-percentage':    MathPercentage,
+  'math-trig-circle':   MathTrigCircle,
+  'math-right-triangle': MathRightTriangle,
+  'math-graph-plotter': MathGraphPlotter,
+  'math-formulas':      MathFormulas,
+}
+
+const activeComponent = computed(() => componentMap[activeTool.value])
 </script>
 
 <template lang="pug">
@@ -45,7 +39,7 @@ const activeTool = computed(() => {
       .tools-container-card
         //- Sidebar Navigation
         aside.tools-sidebar
-          button.back-home-btn(@click="store.setCurrentPage('landing')")
+          button.back-home-btn(@click="router.push('/')")
             TutorIcon(name="chevron-left")
             span Повернутися назад
 
@@ -57,17 +51,17 @@ const activeTool = computed(() => {
           
           nav.sidebar-nav
             button.sidebar-tab-btn(
-              v-for="tab in tabs"
-              :key="tab.id"
-              :class="{ active: store.currentPage === tab.id }"
-              @click="store.setCurrentPage(tab.id)"
+              v-for="tab in TOOL_ROUTES"
+              :key="tab.tool"
+              :class="{ active: activeTool === tab.tool }"
+              @click="router.push(tab.path)"
             )
               TutorIcon.tab-icon(:name="tab.icon")
               span.tab-label {{ tab.label }}
 
         //- Main Work Area
         section.tools-content-area
-          component(:is="activeTool" :key="store.currentPage")
+          component(:is="activeComponent" :key="activeTool")
 
   TutorFooter
 </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import TutorPage from './pages/TutorPage.vue'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <TutorPage />
+  <RouterView />
 </template>

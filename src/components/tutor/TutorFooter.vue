@@ -20,6 +20,7 @@ const scrollToSection = (id: string) => {
         .ticker-item Сайт було створено для успішного навчання та якісної підготовки до іспитів. Розробник tg: @zxcmaf1ck
   footer.footer
     .container.footer-grid
+      //- Left column: logo + social
       .footer-left
         p.footer-logo MATH_SOFI
         p.footer-author Репетитор: #[strong Соня] · 5+ років досвіду
@@ -35,19 +36,20 @@ const scrollToSection = (id: string) => {
             TutorIcon(name="tiktok")
             span TikTok: @math_sofi
 
+      //- Center column: navigation
+      .footer-center
+        p.footer-nav-title Навігація
+        a(href="#about", @click.prevent="scrollToSection('about')") Про мене
+        a(href="#services", @click.prevent="scrollToSection('services')") З чим допомагаю
+        a(href="#cases", @click.prevent="scrollToSection('cases')") Кейси
+        a(href="#reviews", @click.prevent="scrollToSection('reviews')") Відгуки
+        a(href="#consultation", @click.prevent="scrollToSection('consultation')") Консультація
+
+      //- Right column: legal + copyright
       .footer-right
-        .footer-links-row
-          .footer-nav
-            p.footer-nav-title Навігація
-            a(href="#about", @click.prevent="scrollToSection('about')") Про мене
-            a(href="#services", @click.prevent="scrollToSection('services')") З чим допомагаю
-            a(href="#cases", @click.prevent="scrollToSection('cases')") Кейси
-            a(href="#reviews", @click.prevent="scrollToSection('reviews')") Відгуки
-            a(href="#consultation", @click.prevent="scrollToSection('consultation')") Консультація
-          .footer-legal
-            p.footer-nav-title Юридична інформація
-            a(href="/privacy.html") Політика конфіденційності
-            a(href="/terms.html") Умови користування
+        p.footer-nav-title Юридична інформація
+        a(href="/privacy.html") Політика конфіденційності
+        a(href="/terms.html") Умови користування
         p.copyright-text © 2026 MATH_SOFI. Всі права захищено.
 </template>
 
@@ -89,51 +91,60 @@ const scrollToSection = (id: string) => {
 }
 
 @keyframes marquee-scroll {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-  100% {
-    transform: translate3d(-25%, 0, 0);
-  }
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-25%, 0, 0); }
 }
 
 .footer {
   background-color: var(--color-primary);
   color: white;
   padding: 60px 0 30px;
-  border-top: none;
 }
 
+/* ─── Mobile: single column ─────────────────────────────────────── */
 .footer-grid {
   display: flex;
   flex-direction: column;
   gap: 40px;
 }
 
+/* ─── Desktop: 3 columns ─────────────────────────────────────────── */
+@media (min-width: 769px) {
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 48px 60px;
+    align-items: start;
+  }
+}
+
+/* ─── Left column ───────────────────────────────────────────────── */
 .footer-left {
   min-width: 0;
 }
 
-.footer-right {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  min-width: 0;
-}
-
-.footer-links-row {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-}
-
-.footer-nav,
-.footer-legal {
+/* ─── Center column ─────────────────────────────────────────────── */
+.footer-center {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  align-items: flex-start; // text left-aligned, column itself centered by grid
 }
 
+/* ─── Right column ──────────────────────────────────────────────── */
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+
+  @media (min-width: 769px) {
+    align-items: flex-end;
+    text-align: right;
+  }
+}
+
+/* ─── Shared nav title ──────────────────────────────────────────── */
 .footer-nav-title {
   font-size: 16px;
   font-weight: 600;
@@ -141,14 +152,14 @@ const scrollToSection = (id: string) => {
   margin-bottom: 8px;
 }
 
-.footer-nav a,
-.footer-legal a {
+/* ─── Links ─────────────────────────────────────────────────────── */
+.footer-center a,
+.footer-right a {
   font-size: 14px;
   color: #f1f5f9;
   min-height: 44px;
   display: flex;
   align-items: center;
-  width: 100%;
   transition: color var(--transition-fast);
 
   &:hover {
@@ -157,49 +168,24 @@ const scrollToSection = (id: string) => {
   }
 }
 
+@media (min-width: 769px) {
+  .footer-right a {
+    justify-content: flex-end;
+  }
+}
+
+/* ─── Copyright ─────────────────────────────────────────────────── */
 .copyright-text {
   font-size: 13px;
   color: #cbd5e1;
-  margin: 0;
-}
+  margin: 16px 0 0;
 
-@media (min-width: 769px) {
-  .footer-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px 60px;
-    align-items: start;
-  }
-
-  .footer-right {
-    align-items: flex-end;
+  @media (min-width: 769px) {
     text-align: right;
-  }
-
-  .footer-links-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    width: 100%;
-  }
-
-  .footer-nav,
-  .footer-legal {
-    align-items: flex-end;
-  }
-
-  .footer-nav a,
-  .footer-legal a {
-    width: auto;
-    justify-content: flex-end;
-  }
-
-  .copyright-text {
-    text-align: right;
-    width: 100%;
   }
 }
 
+/* ─── Logo / author / social ─────────────────────────────────────── */
 .footer-logo {
   color: white;
   font-family: var(--font-heading);

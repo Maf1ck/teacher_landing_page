@@ -49,14 +49,14 @@ section#about.about-section
 
 .about-grid {
   display: grid;
-  grid-template-columns: 350px 1fr;
+  grid-template-columns: 420px 1fr;
   gap: 48px;
   align-items: center;
 }
 
 .about-photo-wrapper {
   width: 100%;
-  height: 420px;
+  height: 520px;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-lg);
@@ -101,7 +101,7 @@ section#about.about-section
 
 @media (max-width: 1024px) {
   .about-grid {
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 320px 1fr;
     gap: 24px;
   }
 }

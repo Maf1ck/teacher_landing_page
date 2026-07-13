@@ -1,4 +1,5 @@
 import { watch, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { defaultSeo, mathToolsSeo, SITE_URL } from '../config/seo'
 
 type SeoMeta = {
@@ -41,20 +42,22 @@ export function applySeo(meta: SeoMeta) {
   setCanonical(url)
 }
 
-export function useSeo(page: () => 'landing' | string) {
+export function useSeo(_page?: () => string) {
+  const route = useRoute()
+
   const update = () => {
-    const current = page()
-    if (current === 'landing') {
-      applySeo({ title: defaultSeo.title, description: defaultSeo.description, path: '/' })
-    } else {
+    const isTools = route.path.startsWith('/calculators')
+    if (isTools) {
       applySeo({
         title: mathToolsSeo.title,
         description: mathToolsSeo.description,
-        path: '/tools',
+        path: route.path,
       })
+    } else {
+      applySeo({ title: defaultSeo.title, description: defaultSeo.description, path: '/' })
     }
   }
 
   onMounted(update)
-  watch(page, update)
+  watch(() => route.path, update)
 }

@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useTutorStore } from '../../stores/tutor'
 import TutorIcon from './TutorIcon.vue'
 
 const store = useTutorStore()
+
+const tooltipVisible = ref(false)
 </script>
 
 <template lang="pug">
@@ -15,7 +18,18 @@ div
   // Cases Section
   section#cases.cases-section
     .container
-      h2.section-title.text-center Кейси учнів
+      .cases-title-row
+        h2.section-title Кейси учнів
+        //- Tooltip trigger
+        .tooltip-wrapper(
+          @mouseenter="tooltipVisible = true"
+          @mouseleave="tooltipVisible = false"
+          @click="tooltipVisible = !tooltipVisible"
+        )
+          .tooltip-btn ⓘ
+          transition(name="tooltip-pop")
+            .tooltip-box(v-show="tooltipVisible")
+              p Натисніть на ім'я учня зліва, щоб побачити його кейс та результат
       p.section-subtitle.text-center Історії успіху моїх учнів та результати нашої спільної праці
       
       .cases-container
@@ -59,6 +73,11 @@ div
           .case-description
             h4 Як відбувався процес:
             p {{ store.cases[store.activeCase].text }}
+
+          //- Bottom spacer — motivational quote
+          .case-bottom-quote
+            span.quote-mark "
+            p.quote-text Кожен учень здатен досягти результату — потрібен лише правильний підхід.
 </template>
 
 <style scoped lang="scss">
@@ -91,9 +110,18 @@ div
   background-color: #f8fafc;
 }
 
+/* Title row with tooltip */
+.cases-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
 .section-title {
   font-size: 36px;
-  margin-bottom: 16px;
+  margin-bottom: 0;
 }
 
 .section-subtitle {
@@ -101,6 +129,100 @@ div
   color: var(--color-text-muted);
   max-width: 800px;
   margin: 0 auto 48px;
+}
+
+/* ─── Tooltip ───────────────────────────────────────────────── */
+.tooltip-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  // align with title baseline
+  align-self: flex-start;
+  margin-top: 6px;
+}
+
+.tooltip-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--transition-fast);
+
+  &:hover {
+    background-color: var(--color-primary);
+    color: white;
+  }
+}
+
+.tooltip-box {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-text-dark);
+  color: white;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  white-space: nowrap;
+  z-index: 100;
+  box-shadow: var(--shadow-lg);
+  pointer-events: none;
+
+  p { margin: 0; }
+
+  // Arrow
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-bottom-color: var(--color-text-dark);
+  }
+}
+
+// On mobile: open to the right so it doesn't go off-screen
+@media (max-width: 480px) {
+  .tooltip-box {
+    left: auto;
+    right: 0;
+    transform: none;
+    white-space: normal;
+    max-width: 220px;
+
+    &::before {
+      left: auto;
+      right: 10px;
+      transform: none;
+    }
+  }
+}
+
+/* Tooltip transition */
+.tooltip-pop-enter-active,
+.tooltip-pop-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.tooltip-pop-enter-from,
+.tooltip-pop-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-4px);
+}
+@media (max-width: 480px) {
+  .tooltip-pop-enter-from,
+  .tooltip-pop-leave-to {
+    transform: translateY(-4px);
+  }
 }
 
 .cases-container {
@@ -161,7 +283,7 @@ div
   text-align: center;
   line-height: 1.25;
   flex-shrink: 0;
-  max-width: 110px;
+  white-space: nowrap;
   font-size: 11px;
   font-weight: 600;
   color: var(--color-primary);
@@ -180,6 +302,7 @@ div
   color: var(--color-text-muted);
 }
 
+/* ─── Case details card ──────────────────────────────────────── */
 .case-details-card {
   background-color: var(--color-bg-card);
   border-radius: var(--radius-lg);
@@ -188,7 +311,34 @@ div
   border: 1px solid rgba(226, 232, 240, 0.8);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-self: flex-start; /* Prevents stretching to the height of the left column */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Unique decorative background element */
+.case-details-card::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.05) 0%, rgba(37, 99, 235, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.case-details-card::after {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  left: -60px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.03) 0%, rgba(37, 99, 235, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
 }
 
 .case-details-header {
@@ -291,6 +441,35 @@ div
   }
 }
 
+/* ─── Bottom quote (fills empty space on desktop) ───────────── */
+.case-bottom-quote {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.04) 0%, rgba(37, 99, 235, 0.08) 100%);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--color-primary);
+}
+
+.quote-mark {
+  font-size: 40px;
+  line-height: 0.8;
+  color: var(--color-primary);
+  font-family: Georgia, serif;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.quote-text {
+  font-size: 14px;
+  font-style: italic;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
 @media (max-width: 1024px) {
   .cases-container {
     grid-template-columns: 1fr;
@@ -301,11 +480,19 @@ div
     flex-direction: row;
     overflow-x: auto;
     padding-bottom: 8px;
+    flex-wrap: nowrap;
+    gap: 12px;
   }
 
   .case-tab-btn {
     flex-shrink: 0;
     width: 250px;
+  }
+
+  // On tablet/mobile the card takes full height so bottom quote is compact
+  .case-bottom-quote {
+    margin-top: 20px;
+    padding: 12px 16px;
   }
 }
 

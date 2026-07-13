@@ -3,7 +3,6 @@ import type { CaseStudy, Review, ContactForm } from '../types/tutor'
 
 export const useTutorStore = defineStore('tutor', {
   state: () => ({
-    currentPage: 'landing' as 'landing' | 'math-quadratic' | 'math-percentage' | 'math-trig-circle' | 'math-right-triangle' | 'math-graph-plotter' | 'math-formulas',
     isMobileMenuOpen: false,
     activeCase: 0,
     activeReview: 0,
@@ -235,11 +234,6 @@ export const useTutorStore = defineStore('tutor', {
 
     closeSuccessMessage() {
       this.isSubmitted = false
-    },
-
-    setCurrentPage(page: 'landing' | 'math-quadratic' | 'math-percentage' | 'math-trig-circle' | 'math-right-triangle' | 'math-graph-plotter' | 'math-formulas') {
-      this.currentPage = page
-      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
     },
 
     clearPendingNavSection() {

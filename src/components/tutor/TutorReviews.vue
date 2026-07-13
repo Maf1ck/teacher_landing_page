@@ -222,16 +222,16 @@ section#reviews.reviews-section
 .carousel-dots {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 6px 8px;
+  flex-wrap: nowrap;
+  gap: 2px;
   max-width: 100%;
   margin: 16px auto 0;
-  padding: 0 4px;
+  overflow: hidden;
 }
 
 .dot-btn {
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
   border-radius: 50%;
   border: none;
@@ -246,8 +246,8 @@ section#reviews.reviews-section
     position: absolute;
     inset: 0;
     margin: auto;
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background-color: #94a3b8;
     transition: all var(--transition-fast);
@@ -255,9 +255,9 @@ section#reviews.reviews-section
 
   &.active-dot::after {
     background-color: var(--color-primary);
-    width: 22px;
-    height: 10px;
-    border-radius: 5px;
+    width: 18px;
+    height: 8px;
+    border-radius: 4px;
   }
 }
 
@@ -280,13 +280,13 @@ section#reviews.reviews-section
   }
 
   .carousel-dots {
-    gap: 4px 6px;
+    gap: 2px;
     padding: 0;
   }
 
   .dot-btn {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
   }
 
   .review-slide-card {

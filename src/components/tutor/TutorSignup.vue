@@ -36,7 +36,6 @@ const { value: country } = useField<string>('country')
 const { value: comment } = useField<string>('comment')
 
 const gradeOptions = [
-  { value: '1-4', label: 'Молодша школа (1-4 класи)' },
   { value: '5-9', label: 'Середня школа (5-9 класи)' },
   { value: '10-11', label: 'Старша школа (10-11 класи)' },
   { value: 'student', label: 'Студент / Дорослий' },
@@ -238,6 +237,10 @@ section#signup.signup-section
     background-color: rgba(255, 255, 255, 0.18);
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
   }
+}
+
+.form-group textarea {
+  resize: none;
 }
 
 .input-error {

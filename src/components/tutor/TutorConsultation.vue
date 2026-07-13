@@ -232,7 +232,12 @@ div
   padding: 16px 36px;
   font-size: 18px;
 }
-
+.text-center.cta-consult-container {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 @media (max-width: 768px) {
   .consultation-grid {
     grid-template-columns: 1fr;

@@ -1,30 +1,68 @@
 <script setup lang="ts">
-import { nextTick, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useTutorStore } from '../../stores/tutor'
 import TutorIcon from './TutorIcon.vue'
 
-const store = useTutorStore()
+const store  = useTutorStore()
+const route  = useRoute()
+const router = useRouter()
 
+const isMathPage = computed(() => route.path.startsWith('/calculators'))
+
+// ── Active section tracking (scroll-based) ───────────────────────────────────
+// Order MUST match the DOM order in MathTutorLanding.vue
+const SECTIONS = ['hero', 'about', 'services', 'consultation', 'cases', 'reviews', 'signup'] as const
+type SectionId = typeof SECTIONS[number]
+
+const activeSection = ref<SectionId>('hero')
+
+const updateActive = () => {
+  if (isMathPage.value) return
+  const OFFSET = 120 // px — how far past the top triggers the section
+
+  // Walk sections bottom-up — first one whose top is ≤ OFFSET wins
+  for (let i = SECTIONS.length - 1; i >= 0; i--) {
+    const el = document.getElementById(SECTIONS[i])
+    if (!el) continue
+    if (el.getBoundingClientRect().top <= OFFSET) {
+      activeSection.value = SECTIONS[i]
+      return
+    }
+  }
+  activeSection.value = 'hero'
+}
+
+let retryTimer: ReturnType<typeof setInterval> | null = null
+
+onMounted(() => {
+  window.addEventListener('scroll', updateActive, { passive: true })
+  // Retry periodically until all lazy sections have mounted
+  retryTimer = setInterval(updateActive, 800)
+  setTimeout(() => { if (retryTimer) clearInterval(retryTimer) }, 8000)
+})
+onUnmounted(() => {
+  window.removeEventListener('scroll', updateActive)
+  if (retryTimer) clearInterval(retryTimer)
+})
+
+
+// ── Navigation helpers ───────────────────────────────────────────────────────
 const scrollToSection = (id: string, attempt = 0) => {
-  const element = document.getElementById(id)
-  if (element) {
+  const el = document.getElementById(id)
+  if (el) {
     store.clearPendingNavSection()
-    element.scrollIntoView({ behavior: 'smooth' })
+    el.scrollIntoView({ behavior: 'smooth' })
     return
   }
-
-  if (attempt < 30) {
-    setTimeout(() => scrollToSection(id, attempt + 1), 50)
-  }
+  if (attempt < 30) setTimeout(() => scrollToSection(id, attempt + 1), 50)
 }
 
 const navigateToSection = (id: string) => {
   store.closeMobileMenu()
-  store.pendingNavSection = id
-
-  if (store.currentPage !== 'landing') {
-    store.setCurrentPage('landing')
-    nextTick(() => scrollToSection(id))
+  if (isMathPage.value) {
+    store.pendingNavSection = id
+    router.push('/')
   } else {
     scrollToSection(id)
   }
@@ -33,36 +71,49 @@ const navigateToSection = (id: string) => {
 const openCalculators = () => {
   store.closeMobileMenu()
   store.clearPendingNavSection()
-  store.setCurrentPage('math-quadratic')
+  router.push('/calculators/quadratic-equations')
 }
-
-const isMathPage = computed(() => {
-  return [
-    'math-quadratic',
-    'math-percentage',
-    'math-trig-circle',
-    'math-right-triangle',
-    'math-graph-plotter',
-    'math-formulas',
-  ].includes(store.currentPage)
-})
 </script>
 
 <template lang="pug">
 header.header
   .nav-container
-    a.logo(href="#hero", @click.prevent="navigateToSection('hero')", aria-label="MATH_SOFI — на головну") MATH_SOFI
+    a.logo(href="/" @click.prevent="navigateToSection('hero')" aria-label="MATH_SOFI — на головну") MATH_SOFI
 
     nav.nav-links(:class="{ 'nav-active': store.isMobileMenuOpen }")
-      a(href="#about", @click.prevent="navigateToSection('about')") Про мене
-      a(href="#services", @click.prevent="navigateToSection('services')") З чим допомагаю
-      a(href="#cases", @click.prevent="navigateToSection('cases')") Кейси
-      a(href="#reviews", @click.prevent="navigateToSection('reviews')") Відгуки
-      a.nav-highlight(href="#tools", :class="{ active: isMathPage }", @click.prevent="openCalculators") Калькулятори
-      a(href="#consultation", @click.prevent="navigateToSection('consultation')") Консультація
-      a.btn-nav(href="#signup", @click.prevent="navigateToSection('signup')") Записатись
+      a(
+        href="#about"
+        :class="{ active: !isMathPage && activeSection === 'about' }"
+        @click.prevent="navigateToSection('about')"
+      ) Про мене
+      a(
+        href="#services"
+        :class="{ active: !isMathPage && activeSection === 'services' }"
+        @click.prevent="navigateToSection('services')"
+      ) З чим допомагаю
+      a(
+        href="#cases"
+        :class="{ active: !isMathPage && activeSection === 'cases' }"
+        @click.prevent="navigateToSection('cases')"
+      ) Кейси
+      a(
+        href="#reviews"
+        :class="{ active: !isMathPage && activeSection === 'reviews' }"
+        @click.prevent="navigateToSection('reviews')"
+      ) Відгуки
+      a.nav-highlight(
+        href="/calculators/quadratic-equations"
+        :class="{ active: isMathPage }"
+        @click.prevent="openCalculators"
+      ) Калькулятори
+      a(
+        href="#consultation"
+        :class="{ active: !isMathPage && activeSection === 'consultation' }"
+        @click.prevent="navigateToSection('consultation')"
+      ) Консультація
+      a.btn-nav(href="#signup" @click.prevent="navigateToSection('signup')") Записатись
 
-    button.burger-menu(@click="store.toggleMobileMenu", aria-label="Toggle menu")
+    button.burger-menu(@click="store.toggleMobileMenu" aria-label="Toggle menu")
       TutorIcon(:name="store.isMobileMenuOpen ? 'close' : 'menu'")
 </template>
 
@@ -111,9 +162,27 @@ header.header
     min-height: 44px;
     display: inline-flex;
     align-items: center;
+    position: relative;
 
     &:hover {
       color: var(--color-primary);
+    }
+
+    // Active indicator underline
+    &.active:not(.btn-nav) {
+      color: var(--color-primary);
+      font-weight: 600;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 4px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: var(--color-primary);
+        border-radius: 2px;
+      }
     }
   }
 }
@@ -122,6 +191,17 @@ header.header
   &.active {
     color: var(--color-primary) !important;
     font-weight: 600 !important;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: var(--color-primary);
+      border-radius: 2px;
+    }
   }
 }
 
@@ -134,6 +214,8 @@ header.header
   transition: all var(--transition-fast);
   display: inline-flex;
   align-items: center;
+
+  &::after { display: none !important; }
 
   &:hover {
     background-color: var(--color-primary-hover);
@@ -184,6 +266,10 @@ header.header
       width: 100%;
       padding: 10px 0;
       font-size: 16px;
+
+      &.active:not(.btn-nav)::after {
+        bottom: 2px;
+      }
     }
   }
 
