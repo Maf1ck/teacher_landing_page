@@ -4,7 +4,7 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue()],
   server: {
-    historyApiFallback: true,
+    // historyApiFallback: true,
   },
   build: {
     cssMinify: true,
