@@ -16,9 +16,11 @@ const SECTIONS = ['hero', 'about', 'services', 'consultation', 'cases', 'reviews
 type SectionId = typeof SECTIONS[number]
 
 const activeSection = ref<SectionId>('hero')
+const isScrolling = ref(false)
+let scrollTimeout: ReturnType<typeof setTimeout> | null = null
 
 const updateActive = () => {
-  if (isMathPage.value) return
+  if (isMathPage.value || isScrolling.value) return
   const OFFSET = 120 // px — how far past the top triggers the section
 
   // Walk sections bottom-up — first one whose top is ≤ OFFSET wins
@@ -52,7 +54,13 @@ const scrollToSection = (id: string, attempt = 0) => {
   const el = document.getElementById(id)
   if (el) {
     store.clearPendingNavSection()
+    isScrolling.value = true
+    activeSection.value = id as SectionId
     el.scrollIntoView({ behavior: 'smooth' })
+    if (scrollTimeout) clearTimeout(scrollTimeout)
+    scrollTimeout = setTimeout(() => {
+      isScrolling.value = false
+    }, 1000)
     return
   }
   if (attempt < 30) setTimeout(() => scrollToSection(id, attempt + 1), 50)
@@ -101,16 +109,16 @@ header.header
         :class="{ active: !isMathPage && activeSection === 'reviews' }"
         @click.prevent="navigateToSection('reviews')"
       ) Відгуки
-      a.nav-highlight(
-        href="/calculators/quadratic-equations"
-        :class="{ active: isMathPage }"
-        @click.prevent="openCalculators"
-      ) Калькулятори
       a(
         href="#consultation"
         :class="{ active: !isMathPage && activeSection === 'consultation' }"
         @click.prevent="navigateToSection('consultation')"
       ) Консультація
+      a.nav-highlight(
+        href="/calculators/quadratic-equations"
+        :class="{ active: isMathPage }"
+        @click.prevent="openCalculators"
+      ) Калькулятори
       a.btn-nav(href="#signup" @click.prevent="navigateToSection('signup')") Записатись
 
     button.burger-menu(@click="store.toggleMobileMenu" aria-label="Toggle menu")
@@ -171,7 +179,7 @@ header.header
     // Active indicator underline
     &.active:not(.btn-nav) {
       color: var(--color-primary);
-      font-weight: 600;
+      text-shadow: 0 0 .65px var(--color-primary);
 
       &::after {
         content: '';
@@ -190,7 +198,7 @@ header.header
 .nav-highlight {
   &.active {
     color: var(--color-primary) !important;
-    font-weight: 600 !important;
+    text-shadow: 0 0 .65px var(--color-primary) !important;
 
     &::after {
       content: '';

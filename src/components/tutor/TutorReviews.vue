@@ -75,7 +75,7 @@ section#reviews.reviews-section
 
 <style scoped lang="scss">
 .reviews-section {
-  padding: 80px 0;
+  padding: 60px 0;
 }
 
 .section-title {
@@ -87,7 +87,7 @@ section#reviews.reviews-section
   font-size: 18px;
   color: var(--color-text-muted);
   max-width: 800px;
-  margin: 0 auto 48px;
+  margin: 0 auto 32px;
 }
 
 .carousel-outer-wrapper {
@@ -96,37 +96,39 @@ section#reviews.reviews-section
   justify-content: center;
   gap: 24px;
   max-width: 900px;
-  margin: 40px auto 24px;
+  margin: 24px auto 16px;
 }
 
 .carousel-inner-container {
   position: relative;
   flex: 1;
   width: 100%;
-  min-height: 280px;
+  min-height: 260px;
 }
 
 .review-slide-card {
   background-color: var(--color-bg-card);
-  padding: 40px;
+  padding: 36px;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   border: 1px solid rgba(226, 232, 240, 0.8);
   display: flex;
   flex-direction: column;
-  min-height: 280px;
+  min-height: 260px;
   animation: fadeIn 0.4s ease-out;
+  position: relative;
 }
 
 .quote-decorator {
   position: absolute;
-  top: 10px;
-  left: 24px;
-  font-size: 80px;
+  top: 14px;
+  left: 20px;
+  font-size: 56px;
   line-height: 1;
-  color: rgba(37, 99, 235, 0.08);
+  color: rgba(37, 99, 235, 0.12);
   font-family: Georgia, serif;
   user-select: none;
+  pointer-events: none;
 }
 
 .review-body {
@@ -135,6 +137,7 @@ section#reviews.reviews-section
   flex-direction: column;
   position: relative;
   z-index: 2;
+  padding-top: 8px;
 }
 
 .review-text-content {
@@ -143,14 +146,14 @@ section#reviews.reviews-section
   color: var(--color-text-dark);
   font-style: italic;
   margin: 0;
-  min-height: 6.4em;
+  min-height: 5.8em;
 
   &.collapsed {
     display: -webkit-box;
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    min-height: 6.4em;
+    min-height: 5.8em;
   }
 
   &.expanded {
@@ -262,15 +265,22 @@ section#reviews.reviews-section
 }
 
 @media (max-width: 768px) {
+  .reviews-section {
+    padding: 40px 0;
+  }
+
+  .section-subtitle {
+    margin-bottom: 24px;
+  }
+
   .carousel-outer-wrapper {
     gap: 8px;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 16px 0;
   }
 
   .carousel-inner-container,
   .review-slide-card {
-    min-height: 240px;
+    min-height: 220px;
   }
 
   .carousel-control-btn {
@@ -290,7 +300,17 @@ section#reviews.reviews-section
   }
 
   .review-slide-card {
-    padding: 24px;
+    padding: 24px 20px 20px 24px;
+  }
+
+  .quote-decorator {
+    top: 10px;
+    left: 14px;
+    font-size: 44px;
+  }
+
+  .review-body {
+    padding-top: 4px;
   }
 
   .review-text-content {

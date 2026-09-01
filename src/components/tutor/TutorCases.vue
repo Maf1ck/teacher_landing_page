@@ -6,6 +6,10 @@ import TutorIcon from './TutorIcon.vue'
 const store = useTutorStore()
 
 const tooltipVisible = ref(false)
+
+const toggleTooltip = () => {
+  tooltipVisible.value = !tooltipVisible.value
+}
 </script>
 
 <template lang="pug">
@@ -21,12 +25,12 @@ div
       .cases-title-row
         h2.section-title Кейси учнів
         //- Tooltip trigger
-        .tooltip-wrapper(
-          @mouseenter="tooltipVisible = true"
-          @mouseleave="tooltipVisible = false"
-          @click="tooltipVisible = !tooltipVisible"
-        )
-          .tooltip-btn ⓘ
+        .tooltip-wrapper
+          button.tooltip-btn(
+            type="button"
+            aria-label="Інформація про кейси"
+            @click.stop="toggleTooltip"
+          ) i
           transition(name="tooltip-pop")
             .tooltip-box(v-show="tooltipVisible")
               p Натисніть на ім'я учня зліва, щоб побачити його кейс та результат
@@ -135,29 +139,34 @@ div
 .tooltip-wrapper {
   position: relative;
   flex-shrink: 0;
-  // align with title baseline
   align-self: flex-start;
   margin-top: 6px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .tooltip-btn {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background-color: var(--color-primary-light);
   color: var(--color-primary);
   font-size: 14px;
   font-weight: 700;
+  font-family: Georgia, serif;
+  font-style: italic;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   user-select: none;
-  transition: background-color var(--transition-fast);
+  border: none;
+  padding: 0;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
 
-  &:hover {
+  &:hover, &:focus {
     background-color: var(--color-primary);
     color: white;
+    outline: none;
   }
 }
 
@@ -175,7 +184,6 @@ div
   white-space: nowrap;
   z-index: 100;
   box-shadow: var(--shadow-lg);
-  pointer-events: none;
 
   p { margin: 0; }
 
@@ -191,18 +199,18 @@ div
   }
 }
 
-// On mobile: open to the right so it doesn't go off-screen
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .tooltip-box {
     left: auto;
-    right: 0;
+    right: -10px;
     transform: none;
     white-space: normal;
-    max-width: 220px;
+    width: 220px;
+    max-width: 80vw;
 
     &::before {
       left: auto;
-      right: 10px;
+      right: 16px;
       transform: none;
     }
   }
@@ -218,9 +226,10 @@ div
   opacity: 0;
   transform: translateX(-50%) translateY(-4px);
 }
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .tooltip-pop-enter-from,
   .tooltip-pop-leave-to {
+    opacity: 0;
     transform: translateY(-4px);
   }
 }
@@ -312,12 +321,11 @@ div
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-self: flex-start; /* Prevents stretching to the height of the left column */
+  align-self: flex-start;
   position: relative;
   overflow: hidden;
 }
 
-/* Unique decorative background element */
 .case-details-card::before {
   content: '';
   position: absolute;
@@ -441,7 +449,6 @@ div
   }
 }
 
-/* ─── Bottom quote (fills empty space on desktop) ───────────── */
 .case-bottom-quote {
   display: flex;
   align-items: flex-start;
@@ -489,7 +496,6 @@ div
     width: 250px;
   }
 
-  // On tablet/mobile the card takes full height so bottom quote is compact
   .case-bottom-quote {
     margin-top: 20px;
     padding: 12px 16px;

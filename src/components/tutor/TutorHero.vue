@@ -118,8 +118,10 @@ section#hero.hero-section
 .tutor-hero-img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: top center;
+  object-fit: cover;
+  object-position: bottom center;
+  transform: scale(1.12);
+  transform-origin: bottom center;
 }
 
 /* Floating Badges — позиціонуються відносно wrapper */
@@ -289,7 +291,6 @@ section#hero.hero-section
 
   .hero-image-wrapper {
     --cr: 145px; /* 290px / 2 */
-    order: -1;
     height: 410px;
     width: 100%;
     max-width: 460px;
@@ -344,8 +345,8 @@ section#hero.hero-section
 
   .hero-image-circle {
     position: relative;
-    width: 220px;
-    height: 220px;
+    width: 280px;
+    height: 280px;
     top: auto;
     left: auto;
     transform: none;
